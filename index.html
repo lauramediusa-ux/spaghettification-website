@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spaghettification — Design & Development Studio</title>
+<style>
+  @font-face {
+    font-family: 'Neue Haas Grotesk Display Pro';
+    src: local('Neue Haas Grotesk Display Pro'), local('NeueHaasGroteskDisplayPro');
+  }
+
+  :root {
+    --blue:    #000AFF;
+    --black:   #080808;
+    --white:   #FFFFFF;
+    --light:   #F0F0EE;
+    --display: 'Neue Haas Grotesk Display Pro', 'Helvetica Neue', 'Arial Black', Helvetica, sans-serif;
+    --body:    'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+
+  body {
+    background: var(--blue);
+    color: var(--white);
+    font-family: var(--body);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+  }
+  .reveal.in-view { opacity: 1; transform: translateY(0); }
+  .reveal-d1 { transition-delay: 0.05s; }
+  .reveal-d2 { transition-delay: 0.12s; }
+  .reveal-d3 { transition-delay: 0.19s; }
+  .reveal-d4 { transition-delay: 0.26s; }
+  .reveal-d5 { transition-delay: 0.33s; }
+  .reveal-d6 { transition-delay: 0.40s; }
+
+  /* ══════════════════════════════════
+     NAV
+  ══════════════════════════════════ */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 3rem;
+    z-index: 200;
+  }
+
+  .nav-logo svg { height: 22px; width: auto; display: block; }
+
+  .nav-links { display: flex; gap: 3.5rem; list-style: none; }
+  .nav-links a {
+    color: var(--white);
+    text-decoration: none;
+    font-family: var(--display);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+    transition: opacity 0.3s;
+  }
+  .nav-links a:hover { opacity: 0.5; }
+
+  /* Hamburger */
+  .nav-burger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .nav-burger span {
+    display: block;
+    width: 24px; height: 1.5px;
+    background: white;
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  .nav-burger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .nav-burger.open span:nth-child(2) { opacity: 0; }
+  .nav-burger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--blue);
+    z-index: 190;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    color: white;
+    text-decoration: none;
+    font-family: var(--display);
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+
+  /* ══════════════════════════════════
+     HERO
+  ══════════════════════════════════ */
+  .hero {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 120px;   /* clears the nav */
+    overflow: hidden;
+    background: var(--blue);
+  }
+
+  /* ── SCATTERED LABELS ── */
+  .scatter-label {
+    position: absolute;
+    font-family: var(--body);
+    font-size: 0.68rem;
+    line-height: 1.55;
+    color: var(--white);
+    opacity: 0.55;
+    z-index: 50;
+    pointer-events: none;
+    letter-spacing: 0.01em;
+  }
+  .sl-1 { top: 130px; left: 3rem; }
+  .sl-2 { top: 130px; right: 3rem; text-align: right; }
+
+  /* ── HERO MIDDLE (logo + strip) ── */
+  .hero-middle {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding: 1rem 0 1.5rem;
+  }
+
+  /* ── GIANT LOGO — near full-bleed ── */
+  .giant-logo {
+    width: 98vw;                /* fills almost the entire viewport width */
+    pointer-events: none;
+    z-index: 1;
+    padding: 0 1vw;             /* tiny breathing room on each side */
+  }
+  .giant-logo svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ══════════════════════════════════
+     SCROLLING STRIP  (right → left)
+  ══════════════════════════════════ */
+  .scroll-strip {
+    width: 100%;
+    overflow: hidden;
+    z-index: 2;
+    cursor: default;
+  }
+
+  .scroll-track {
+    display: flex;
+    gap: 0;                     /* no space between cards */
+    width: max-content;
+    animation: scrollLeft 45s linear infinite;
+  }
+
+  /* pause on hover */
+  .scroll-strip:hover .scroll-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes scrollLeft {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }   /* -50% = one full set width */
+  }
+
+  .s-card {
+    width: 260px;
+    height: 340px;              /* taller cards matching the design */
+    border-radius: 0;           /* sharp edges, no rounding */
+    flex-shrink: 0;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+    transition: transform 0.35s cubic-bezier(0.16,1,0.3,1),
+                box-shadow 0.35s cubic-bezier(0.16,1,0.3,1);
+    position: relative;
+    overflow: hidden;
+    /* ─────────────────────────────────────────────────────────────
+       TO ADD YOUR IMAGE: replace background with:
+       background: url('images/your-project.jpg') center / cover no-repeat;
+       ───────────────────────────────────────────────────────────── */
+  }
+
+  /* subtle inner shadow on each card */
+  .s-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 55%);
+    border-radius: 0;
+    pointer-events: none;
+  }
+
+  .s-card:hover {
+    transform: scale(1.03) translateY(-6px);
+    box-shadow: 0 28px 65px rgba(0,0,0,0.65);
+    z-index: 10;
+  }
+
+  /* ── BOTTOM LABELS ROW ── */
+  .hero-labels {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 3rem 3rem;
+    z-index: 100;
+    position: relative;
+    gap: 2rem;
+  }
+
+  .hero-label {
+    font-family: var(--display);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    line-height: 1.5;
+    opacity: 0.85;
+    white-space: nowrap;
+  }
+
+  /* ══════════════════════════════════
+     CLAIM STATEMENT (below hero)
+  ══════════════════════════════════ */
+  .claim-section {
+    background: var(--blue);
+    padding: 8rem 4rem;
+  }
+
+  .claim-text {
+    font-family: var(--display);
+    font-weight: 400;             /* regular — not bold */
+    font-size: clamp(1.8rem, 3.6vw, 4.2rem);
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--white);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ══════════════════════════════════
+     SHARED SECTION STYLES
+  ══════════════════════════════════ */
+  .section { padding: 7rem 3rem; position: relative; }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-top: 1px solid currentColor;
+    padding-top: 1.5rem;
+    margin-bottom: 5rem;
+    opacity: 0.9;
+  }
+  .section-tag {
+    font-family: var(--display);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.45;
+  }
+  .section-title {
+    font-family: var(--display);
+    font-size: clamp(2.2rem, 4vw, 4rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  /* ══════════════════════════════════
+     WORKS  (#080808)
+  ══════════════════════════════════ */
+  #works { background: var(--black); color: var(--white); }
+
+  .works-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.6rem;
+  }
+  .work-card { cursor: pointer; }
+  .work-thumb {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 1.1rem;
+    transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+    /* TO ADD IMAGE: background: url('images/project.jpg') center / cover no-repeat; */
+  }
+  .work-card:hover .work-thumb { transform: scale(0.97); }
+  .work-divider {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    padding-top: 0.9rem;
+  }
+  .work-title {
+    font-family: var(--display);
+    font-size: 0.92rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .work-cat {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.4;
+  }
+
+  /* ══════════════════════════════════
+     SERVICES  (#000AFF)
+  ══════════════════════════════════ */
+  #services { background: var(--blue); color: var(--white); }
+
+  .services-list { display: flex; flex-direction: column; }
+  .service-item {
+    display: grid;
+    grid-template-columns: 60px 1fr 38%;
+    align-items: start;
+    gap: 3rem;
+    padding: 3rem 0;
+    border-top: 1px solid rgba(255,255,255,0.25);
+  }
+  .service-item:last-child { border-bottom: 1px solid rgba(255,255,255,0.25); }
+  .service-num {
+    font-family: var(--display);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    opacity: 0.35;
+    padding-top: 0.6rem;
+  }
+  .service-name {
+    font-family: var(--display);
+    font-size: clamp(1.8rem, 2.8vw, 2.8rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .service-desc {
+    font-size: 0.88rem;
+    line-height: 1.75;
+    opacity: 0.65;
+    padding-top: 0.55rem;
+  }
+
+  /* ══════════════════════════════════
+     ABOUT  (#F0F0EE)
+  ══════════════════════════════════ */
+  #about { background: var(--light); color: var(--black); }
+  #about .section-header { border-top-color: rgba(0,0,0,0.2); }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+  .about-statement {
+    font-family: var(--display);
+    font-size: clamp(2rem, 3.2vw, 3.2rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .about-body {
+    font-size: 0.92rem;
+    line-height: 1.85;
+    opacity: 0.6;
+    margin-top: 2rem;
+    max-width: 440px;
+  }
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    margin-top: 4rem;
+    padding-top: 3rem;
+    border-top: 1px solid rgba(0,0,0,0.12);
+  }
+  .stat-val {
+    font-family: var(--display);
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    line-height: 1;
+  }
+  .stat-lbl {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    opacity: 0.4;
+    margin-top: 0.5rem;
+  }
+  .about-photo {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    border-radius: 6px;
+    background: linear-gradient(155deg, #c9c9c9, #e8e8e8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* TO ADD PHOTO: background: url('images/team.jpg') center / cover no-repeat; */
+  }
+  .about-photo-hint {
+    font-family: var(--display);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.3;
+    color: var(--black);
+  }
+
+  /* ══════════════════════════════════
+     CONTACT  (#080808)
+  ══════════════════════════════════ */
+  #contact {
+    background: var(--black);
+    color: var(--white);
+    text-align: center;
+    padding: 8rem 3rem 6rem;
+  }
+  .contact-eyebrow {
+    font-family: var(--display);
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.4;
+    margin-bottom: 2rem;
+  }
+  .contact-cta {
+    font-family: var(--display);
+    font-size: clamp(3.5rem, 9vw, 10rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.04em;
+    line-height: 0.88;
+    margin-bottom: 3.5rem;
+  }
+  .contact-email {
+    display: inline-block;
+    font-family: var(--display);
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: white;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.35);
+    padding-bottom: 0.25rem;
+    transition: border-color 0.3s, opacity 0.3s;
+  }
+  .contact-email:hover { border-color: white; opacity: 0.7; }
+
+  /* ══════════════════════════════════
+     FOOTER
+  ══════════════════════════════════ */
+  footer {
+    background: var(--black);
+    color: var(--white);
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-family: var(--display);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.35;
+  }
+  footer a { color: white; text-decoration: none; opacity: 0.6; transition: opacity 0.3s; }
+  footer a:hover { opacity: 1; }
+  .footer-links { display: flex; gap: 2.5rem; }
+
+  /* ══════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════ */
+  @media (max-width: 1024px) {
+    .service-item { grid-template-columns: 50px 1fr; }
+    .service-desc { grid-column: 2; padding-top: 0; margin-top: -0.5rem; }
+    .works-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 1.5rem; }
+    .nav-links { display: none; }
+    .nav-burger { display: flex; }
+
+    .hero { padding-top: 90px; }
+    .hero-middle { gap: 1.5rem; }
+    .giant-logo { width: 98vw; padding: 0 1vw; }
+    .s-card { width: 160px; height: 210px; }
+    .hero-labels { padding: 0 1.5rem 2rem; gap: 1rem; flex-wrap: wrap; }
+    .hero-label { font-size: 0.65rem; white-space: normal; }
+    .scatter-label { display: none; }
+
+    .section { padding: 5rem 1.5rem; }
+    .works-grid { grid-template-columns: 1fr; }
+    .service-item { grid-template-columns: 1fr; gap: 1rem; padding: 2.5rem 0; }
+    .service-num { padding-top: 0; }
+    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .about-photo { aspect-ratio: 4 / 3; }
+    .about-stats { grid-template-columns: repeat(2, 1fr); }
+    .contact-cta { font-size: clamp(2.8rem, 14vw, 5rem); }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+    .footer-links { gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════
+       NAV
+  ══════════════════════════════════ -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1108.09 60.03"><defs><style>.l{fill:#fff;}</style></defs><g><path class="l" d="M178.01,22.27c0-12.97-9.06-21.38-22.29-21.38h-45.76v58.23h14.98v-15.56h30.78c13.23,0,22.29-8.32,22.29-21.3ZM151.56,31.01h-26.62V13.46h26.62c4.49,0,11.48,0,11.48,8.81s-6.99,8.74-11.48,8.74Z"/><path class="l" d="M199.93.89l-30.03,58.23h16.47l6.24-12.4h34.86l6.24,12.4h16.55L220.14.89h-20.21ZM198.18,35.58l11.89-23.62,11.81,23.62h-23.71Z"/><path class="l" d="M283.49,12.62c15.8,0,19.8,6.57,20.63,10.98h15.23C318.43,9.13,306.78.06,283.49.06s-37.11,10.65-37.11,29.95,13.15,29.95,34.61,29.95c12.4,0,21.13-4,26.62-9.98l.67,9.15h11.06v-31.19h-36.94v9.73h21.71c-.33,4.41-6.15,10.74-20.63,10.74-19.39,0-22.13-10.98-22.13-18.05s2.66-17.72,22.13-17.72Z"/><polygon class="l" points="394.53 23.69 347.12 23.69 347.12 .89 332.14 .89 332.14 59.12 347.12 59.12 347.12 36.33 394.53 36.33 394.53 59.12 409.51 59.12 409.51 .89 394.53 .89 394.53 23.69"/><polygon class="l" points="418.98 59.12 480.54 59.12 480.54 47.23 433.96 47.23 433.96 35.42 480.54 35.42 480.54 24.6 433.96 24.6 433.96 12.79 480.54 12.79 480.54 .89 418.98 .89 418.98 59.12"/><polygon class="l" points="537.22 .89 484.65 .89 484.65 13.46 512.94 13.46 512.94 59.12 527.91 59.12 527.91 13.46 537.22 13.46 556.19 13.46 565.51 13.46 565.51 59.12 580.49 59.12 580.49 13.46 608.77 13.46 608.77 .89 556.19 .89 537.22 .89"/><rect class="l" x="613.72" y=".89" width="14.98" height="58.23"/><polygon class="l" points="635.35 59.12 650.33 59.12 650.33 40.9 691.92 40.9 691.92 28.26 650.33 28.26 650.33 13.46 696.91 13.46 696.91 .89 635.35 .89 635.35 59.12"/><rect class="l" x="701.86" y=".89" width="14.98" height="58.23"/><path class="l" d="M779.56,34.17c-1.41,9.48-8.73,13.22-21.13,13.22-15.14,0-21.63-5.49-21.63-17.47s6.41-17.3,21.63-17.3c12.48,0,19.72,3.66,21.13,13.06h15.23c-1.5-16.81-13.14-25.62-36.35-25.62-25.62,0-36.6,10.57-36.6,29.86s10.98,30.03,36.6,30.03c23.21,0,34.86-8.9,36.35-25.79h-15.23Z"/><path class="l" d="M820.45.89l-30.03,58.23h16.47l6.24-12.4h34.86l6.24,12.4h16.55L840.67.89h-20.21ZM818.71,35.58l11.89-23.62,11.81,23.62h-23.71Z"/><polygon class="l" points="857.92 13.46 886.21 13.46 886.21 59.12 901.18 59.12 901.18 13.46 929.46 13.46 929.46 .89 857.92 .89 857.92 13.46"/><rect class="l" x="934.41" y=".89" width="14.98" height="58.23"/><path class="l" d="M990.99.06c-25.62,0-36.6,10.57-36.6,29.86s10.98,30.03,36.6,30.03,36.6-10.73,36.6-30.03S1016.53.06,990.99.06ZM990.99,47.39c-15.56,0-21.63-5.49-21.63-17.47s5.99-17.3,21.63-17.3,21.63,5.49,21.63,17.3-6.07,17.47-21.63,17.47Z"/><polygon class="l" points="1093.11 .89 1093.11 44.65 1053.35 .89 1033.05 .89 1033.05 59.12 1048.03 59.12 1048.03 15.45 1087.71 59.12 1108.09 59.12 1108.09 .89 1093.11 .89"/><path class="l" d="M99.89,38.06c-2.15-1.34-6.5-1.76-12.46-1.93,0,0,.38,2.48-.03,6.02-.38,3.3-4.48,4.61-6.37,4.94-5.86,1.01-12.28,1.51-20.24,1-7.96-.51-14.47-1.57-16.68-4.2-1.98-2.35-1.64-4.77-1.64-4.77h-14.98s-.61,10.04,6.96,14.92c7.57,4.87,16.98,5.42,25.97,5.9s22.59-.66,27.64-2.2c2.25-.69,4.85-1.64,7.39-3.38,2.53-1.74,4.41-4.26,5.15-6.34.93-2.6,2.35-8.03-.71-9.94Z"/><path class="l" d="M32.04,23.77c2.13,1.34,5.74,1.11,11.38.88,0,0-.35-3.77.34-6.53.74-2.97,2.16-4.84,5.69-5.36,5.85-.87,9.83-.96,17.24-.75,7.4.21,13.08,1.02,15.68,3.27,2.15,1.86,1.9,4.69,1.9,4.69h14.98s.68-9.05-7.27-14.18C85.43,1.54,75.43.43,66.43.05c-6.77-.29-18.62.54-25.7,2.82-5.16,1.66-8.34,4.12-10.14,7.76-.82,1.65-1.64,3.87-1.41,8.01.11,2.06.93,3.9,2.87,5.12Z"/><path class="l" d="M72.13,24.66l-28.12.02-.59-.04s-.01.09-.01.1c-.12,1.03-.97,11.86,15.17,11.36l28.26-.02.59.04s0-.09.01-.1c.12-1.03.83-11.86-15.32-11.37Z"/><path class="l" d="M13.05,16.35h0s0,0,0,0C11.78,22.44,6.11,28.12,0,29.38h0c6.1,1.27,11.77,6.95,13.03,13.05h0c1.26-6.1,6.94-11.77,13.05-13.03h0c-6.1-1.26-11.78-6.94-13.04-13.04Z"/></g></svg>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#works">Works</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#about">About Us</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-burger" id="burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#works"    onclick="closeMobile()">Works</a>
+    <a href="#services" onclick="closeMobile()">Services</a>
+    <a href="#about"    onclick="closeMobile()">About</a>
+    <a href="#contact"  onclick="closeMobile()">Contact</a>
+  </div>
+
+  <!-- ══════════════════════════════════
+       HERO
+  ══════════════════════════════════ -->
+  <section class="hero">
+
+    <!-- Scattered labels -->
+    <div class="scatter-label sl-1">Berlin based<br>design driven<br>since 2026</div>
+    <div class="scatter-label sl-2">Berlin based<br>design driven<br>since 2026</div>
+
+    <!-- Logo + Scrolling strip (vertically centred) -->
+    <div class="hero-middle">
+
+      <!-- Giant logo — identical paths to nav logo, fill applied on <g> -->
+      <div class="giant-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1108.09 60.03"><g fill="white"><path d="M178.01,22.27c0-12.97-9.06-21.38-22.29-21.38h-45.76v58.23h14.98v-15.56h30.78c13.23,0,22.29-8.32,22.29-21.3ZM151.56,31.01h-26.62V13.46h26.62c4.49,0,11.48,0,11.48,8.81s-6.99,8.74-11.48,8.74Z"/><path d="M199.93.89l-30.03,58.23h16.47l6.24-12.4h34.86l6.24,12.4h16.55L220.14.89h-20.21ZM198.18,35.58l11.89-23.62,11.81,23.62h-23.71Z"/><path d="M283.49,12.62c15.8,0,19.8,6.57,20.63,10.98h15.23C318.43,9.13,306.78.06,283.49.06s-37.11,10.65-37.11,29.95,13.15,29.95,34.61,29.95c12.4,0,21.13-4,26.62-9.98l.67,9.15h11.06v-31.19h-36.94v9.73h21.71c-.33,4.41-6.15,10.74-20.63,10.74-19.39,0-22.13-10.98-22.13-18.05s2.66-17.72,22.13-17.72Z"/><polygon points="394.53 23.69 347.12 23.69 347.12 .89 332.14 .89 332.14 59.12 347.12 59.12 347.12 36.33 394.53 36.33 394.53 59.12 409.51 59.12 409.51 .89 394.53 .89 394.53 23.69"/><polygon points="418.98 59.12 480.54 59.12 480.54 47.23 433.96 47.23 433.96 35.42 480.54 35.42 480.54 24.6 433.96 24.6 433.96 12.79 480.54 12.79 480.54 .89 418.98 .89 418.98 59.12"/><polygon points="537.22 .89 484.65 .89 484.65 13.46 512.94 13.46 512.94 59.12 527.91 59.12 527.91 13.46 537.22 13.46 556.19 13.46 565.51 13.46 565.51 59.12 580.49 59.12 580.49 13.46 608.77 13.46 608.77 .89 556.19 .89 537.22 .89"/><rect x="613.72" y=".89" width="14.98" height="58.23"/><polygon points="635.35 59.12 650.33 59.12 650.33 40.9 691.92 40.9 691.92 28.26 650.33 28.26 650.33 13.46 696.91 13.46 696.91 .89 635.35 .89 635.35 59.12"/><rect x="701.86" y=".89" width="14.98" height="58.23"/><path d="M779.56,34.17c-1.41,9.48-8.73,13.22-21.13,13.22-15.14,0-21.63-5.49-21.63-17.47s6.41-17.3,21.63-17.3c12.48,0,19.72,3.66,21.13,13.06h15.23c-1.5-16.81-13.14-25.62-36.35-25.62-25.62,0-36.6,10.57-36.6,29.86s10.98,30.03,36.6,30.03c23.21,0,34.86-8.9,36.35-25.79h-15.23Z"/><path d="M820.45.89l-30.03,58.23h16.47l6.24-12.4h34.86l6.24,12.4h16.55L840.67.89h-20.21ZM818.71,35.58l11.89-23.62,11.81,23.62h-23.71Z"/><polygon points="857.92 13.46 886.21 13.46 886.21 59.12 901.18 59.12 901.18 13.46 929.46 13.46 929.46 .89 857.92 .89 857.92 13.46"/><rect x="934.41" y=".89" width="14.98" height="58.23"/><path d="M990.99.06c-25.62,0-36.6,10.57-36.6,29.86s10.98,30.03,36.6,30.03,36.6-10.73,36.6-30.03S1016.53.06,990.99.06ZM990.99,47.39c-15.56,0-21.63-5.49-21.63-17.47s5.99-17.3,21.63-17.3,21.63,5.49,21.63,17.3-6.07,17.47-21.63,17.47Z"/><polygon points="1093.11 .89 1093.11 44.65 1053.35 .89 1033.05 .89 1033.05 59.12 1048.03 59.12 1048.03 15.45 1087.71 59.12 1108.09 59.12 1108.09 .89 1093.11 .89"/><path d="M99.89,38.06c-2.15-1.34-6.5-1.76-12.46-1.93,0,0,.38,2.48-.03,6.02-.38,3.3-4.48,4.61-6.37,4.94-5.86,1.01-12.28,1.51-20.24,1-7.96-.51-14.47-1.57-16.68-4.2-1.98-2.35-1.64-4.77-1.64-4.77h-14.98s-.61,10.04,6.96,14.92c7.57,4.87,16.98,5.42,25.97,5.9s22.59-.66,27.64-2.2c2.25-.69,4.85-1.64,7.39-3.38,2.53-1.74,4.41-4.26,5.15-6.34.93-2.6,2.35-8.03-.71-9.94Z"/><path d="M32.04,23.77c2.13,1.34,5.74,1.11,11.38.88,0,0-.35-3.77.34-6.53.74-2.97,2.16-4.84,5.69-5.36,5.85-.87,9.83-.96,17.24-.75,7.4.21,13.08,1.02,15.68,3.27,2.15,1.86,1.9,4.69,1.9,4.69h14.98s.68-9.05-7.27-14.18C85.43,1.54,75.43.43,66.43.05c-6.77-.29-18.62.54-25.7,2.82-5.16,1.66-8.34,4.12-10.14,7.76-.82,1.65-1.64,3.87-1.41,8.01.11,2.06.93,3.9,2.87,5.12Z"/><path d="M72.13,24.66l-28.12.02-.59-.04s-.01.09-.01.1c-.12,1.03-.97,11.86,15.17,11.36l28.26-.02.59.04s0-.09.01-.1c.12-1.03.83-11.86-15.32-11.37Z"/><path d="M13.05,16.35h0s0,0,0,0C11.78,22.44,6.11,28.12,0,29.38h0c6.1,1.27,11.77,6.95,13.03,13.05h0c1.26-6.1,6.94-11.77,13.05-13.03h0c-6.1-1.26-11.78-6.94-13.04-13.04Z"/></g></svg>
+      </div>
+
+      <!-- Scrolling strip: right → left, seamless loop -->
+      <!-- Cards are duplicated (×2) so the animation loops without a gap -->
+      <div class="scroll-strip">
+        <div class="scroll-track" id="scrollTrack">
+
+          <!-- Set 1 (10 cards) -->
+          <div class="s-card" style="background:linear-gradient(155deg,#1a1a2e,#16213e);"></div>
+          <div class="s-card" style="background:linear-gradient(155deg,#1a0505,#e63946);"></div>
+          <div class="s-card" style="background:linear-gradient(155deg,#051220,#0f3460);"></div>
+          <div class="s-card" style="background:linear-gradient(155deg,#0d2b1e,#00b894);"></div>
+          <div class="s-card" style="background:linear-gradient(155deg,#1a1200,#fdcb6e);"></div>
+          <div class="s-card" style="background:linear-gradient(155deg,#120512,#a29bfe);"></div>
+          <div class="s-card" style="background:linear-gradient(155deg,#0a2020,#40e0d0);"></div>
+          <div class="s-card" style="background:linear-gradient(155deg,#1a1a1a,#fd79a8);"></div>
+          <div class="s-card" style="background:linear-gradient(155deg,#0a0a0a,#eeeeee);"></div>
+          <div class="s-card" style="background:linear-gradient(155deg,#120a00,#ff9f43);"></div>
+
+          <!-- Set 2 (exact duplicate — makes the loop seamless) -->
+          <div class="s-card" style="background:linear-gradient(155deg,#1a1a2e,#16213e);"></div>
+          <div class="s-card" style="background:linear-gradient(155deg,#1a0505,#e63946);"></div>
+          <div class="s-card" style="background:linear-gradient(155deg,#051220,#0f3460);"></div>
+          <div class="s-card" style="background:linear-gradient(155deg,#0d2b1e,#00b894);"></div>
+          <div class="s-card" style="background:linear-gradient(155deg,#1a1200,#fdcb6e);"></div>
+          <div class="s-card" style="background:linear-gradient(155deg,#120512,#a29bfe);"></div>
+          <div class="s-card" style="background:linear-gradient(155deg,#0a2020,#40e0d0);"></div>
+          <div class="s-card" style="background:linear-gradient(155deg,#1a1a1a,#fd79a8);"></div>
+          <div class="s-card" style="background:linear-gradient(155deg,#0a0a0a,#eeeeee);"></div>
+          <div class="s-card" style="background:linear-gradient(155deg,#120a00,#ff9f43);"></div>
+
+        </div>
+      </div>
+
+    </div><!-- /hero-middle -->
+
+    <!-- Bottom labels — spread across the hero footer -->
+    <div class="hero-labels">
+      <span class="hero-label">Berlin based<br>design studio since 2026</span>
+      <span class="hero-label">Brand &amp;<br>Visual Identity</span>
+      <span class="hero-label">Web Design &amp;<br>Development</span>
+      <span class="hero-label">UI/UX<br>Design</span>
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════
+       CLAIM STATEMENT
+  ══════════════════════════════════ -->
+  <section class="claim-section">
+    <p class="claim-text">Spaghettification is a Design and Development Studio based in Berlin with a thing for Digital Startups and Fintech Companies.</p>
+  </section>
+
+  <!-- ══════════════════════════════════
+       WORKS
+  ══════════════════════════════════ -->
+  <section id="works" class="section">
+    <div class="section-header reveal">
+      <span class="section-tag">01 — Selected Works</span>
+      <h2 class="section-title">Works</h2>
+    </div>
+
+    <div class="works-grid">
+
+      <!-- CARD 1 — TO ADD YOUR IMAGE: change style to: background: url('images/project1.jpg') center/cover no-repeat -->
+      <article class="work-card reveal reveal-d1">
+        <div class="work-thumb" style="background:linear-gradient(145deg,#1a1a2e,#16213e);"></div>
+        <div class="work-divider">
+          <span class="work-title">Project Name</span>
+          <span class="work-cat">Brand — 2025</span>
+        </div>
+      </article>
+
+      <article class="work-card reveal reveal-d2">
+        <div class="work-thumb" style="background:linear-gradient(145deg,#1a0505,#e63946);"></div>
+        <div class="work-divider">
+          <span class="work-title">Project Name</span>
+          <span class="work-cat">Web — 2025</span>
+        </div>
+      </article>
+
+      <article class="work-card reveal reveal-d3">
+        <div class="work-thumb" style="background:linear-gradient(145deg,#051220,#0f3460);"></div>
+        <div class="work-divider">
+          <span class="work-title">Project Name</span>
+          <span class="work-cat">UI/UX — 2025</span>
+        </div>
+      </article>
+
+      <article class="work-card reveal reveal-d4">
+        <div class="work-thumb" style="background:linear-gradient(145deg,#051a10,#00b894);"></div>
+        <div class="work-divider">
+          <span class="work-title">Project Name</span>
+          <span class="work-cat">Brand — 2026</span>
+        </div>
+      </article>
+
+      <article class="work-card reveal reveal-d5">
+        <div class="work-thumb" style="background:linear-gradient(145deg,#120512,#a29bfe);"></div>
+        <div class="work-divider">
+          <span class="work-title">Project Name</span>
+          <span class="work-cat">UI/UX — 2026</span>
+        </div>
+      </article>
+
+      <article class="work-card reveal reveal-d6">
+        <div class="work-thumb" style="background:linear-gradient(145deg,#1a1200,#fdcb6e);"></div>
+        <div class="work-divider">
+          <span class="work-title">Project Name</span>
+          <span class="work-cat">Web — 2026</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════
+       SERVICES
+  ══════════════════════════════════ -->
+  <section id="services" class="section">
+    <div class="section-header reveal">
+      <span class="section-tag">02 — What We Do</span>
+      <h2 class="section-title">Services</h2>
+    </div>
+
+    <div class="services-list">
+      <div class="service-item reveal">
+        <span class="service-num">01</span>
+        <h3 class="service-name">Brand &amp;<br>Visual Identity</h3>
+        <p class="service-desc">From zero to a brand that commands the room. We build visual systems that are precise, distinctive, and built to scale — logos, color, typography, motion, the whole stack.</p>
+      </div>
+      <div class="service-item reveal reveal-d1">
+        <span class="service-num">02</span>
+        <h3 class="service-name">Web Design &amp;<br>Development</h3>
+        <p class="service-desc">Websites that move and convert. We design and code digital experiences from concept to deployment — fast, accessible, and obsessively detailed.</p>
+      </div>
+      <div class="service-item reveal reveal-d2">
+        <span class="service-num">03</span>
+        <h3 class="service-name">UI/UX<br>Design</h3>
+        <p class="service-desc">Products that make sense and feel good. User research, wireframes, prototypes, design systems — we build interfaces where beauty and usability are the same thing.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════
+       ABOUT
+  ══════════════════════════════════ -->
+  <section id="about" class="section">
+    <div class="section-header reveal">
+      <span class="section-tag">03 — Who We Are</span>
+      <h2 class="section-title">About</h2>
+    </div>
+
+    <div class="about-grid">
+      <div>
+        <h2 class="about-statement reveal">We make digital things look like they mean it.</h2>
+        <p class="about-body reveal reveal-d1">Spaghettification is a Berlin-based design and development studio built for brands that refuse to be ordinary. We work with digital startups and fintech companies who understand that design isn't decoration — it's infrastructure. Every pixel deliberate. Every interaction earned.</p>
+        <p class="about-body reveal reveal-d2" style="margin-top:1rem;">Founded in 2026, we believe the best work sits at the edge of craft and code. We're small by choice, hands-on by nature, and relentlessly focused on the details that separate good from unforgettable.</p>
+        <div class="about-stats reveal reveal-d3">
+          <div><div class="stat-val">10+</div><div class="stat-lbl">Projects Delivered</div></div>
+          <div><div class="stat-val">8</div><div class="stat-lbl">Happy Clients</div></div>
+          <div><div class="stat-val">3</div><div class="stat-lbl">Disciplines</div></div>
+          <div><div class="stat-val">'26</div><div class="stat-lbl">Founded</div></div>
+        </div>
+      </div>
+      <div class="about-photo reveal reveal-d2">
+        <p class="about-photo-hint">Your photo here</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════
+       CONTACT
+  ══════════════════════════════════ -->
+  <section id="contact">
+    <p class="contact-eyebrow reveal">— Get in touch</p>
+    <h2 class="contact-cta reveal reveal-d1">Let's<br>Work<br>Together.</h2>
+    <!-- Replace with your actual email address -->
+    <a href="mailto:hello@spaghettification.studio" class="contact-email reveal reveal-d2">
+      hello@spaghettification.studio
+    </a>
+  </section>
+
+  <!-- ══════════════════════════════════
+       FOOTER
+  ══════════════════════════════════ -->
+  <footer>
+    <span>© 2026 Spaghettification</span>
+    <div class="footer-links">
+      <a href="#">Instagram</a>
+      <a href="#">LinkedIn</a>
+      <a href="#">Behance</a>
+    </div>
+    <span>Berlin, DE</span>
+  </footer>
+
+  <!-- ══════════════════════════════════
+       SCRIPTS
+  ══════════════════════════════════ -->
+  <script>
+    /* ── Scroll reveal ── */
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    /* ── Mobile menu ── */
+    const burger     = document.getElementById('burger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    burger.addEventListener('click', () => {
+      burger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+      document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+    });
+
+    function closeMobile() {
+      burger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  </script>
+
+</body>
+</html>
