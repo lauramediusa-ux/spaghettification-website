@@ -204,8 +204,8 @@
   }
 
   .s-card {
-    width: 260px;
-    height: 340px;              /* taller cards matching the design */
+    width: 420px;
+    height: 420px;              /* large square cards */
     border-radius: 0;           /* sharp edges, no rounding */
     flex-shrink: 0;
     box-shadow: 0 12px 40px rgba(0,0,0,0.45);
@@ -532,7 +532,7 @@
     .hero { padding-top: 90px; }
     .hero-middle { gap: 1.5rem; }
     .giant-logo { width: 98vw; padding: 0 1vw; }
-    .s-card { width: 160px; height: 210px; }
+    .s-card { width: 220px; height: 220px; }
     .hero-labels { padding: 0 1.5rem 2rem; gap: 1rem; flex-wrap: wrap; }
     .hero-label { font-size: 0.65rem; white-space: normal; }
     .scatter-label { display: none; }
@@ -600,28 +600,28 @@
       <div class="scroll-strip">
         <div class="scroll-track" id="scrollTrack">
 
-          <!-- Set 1 -->
+          <!-- Set 1 — order: 1,4,8,9,5,2,7,3,6,10 -->
           <div class="s-card" style="background:url('project1.png') center/cover no-repeat;"></div>
-          <div class="s-card" style="position:relative;overflow:hidden;"><video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="project2.mp4" type="video/mp4"></video></div>
-          <div class="s-card" style="background:url('project3.png') center/cover no-repeat;"></div>
           <div class="s-card" style="background:url('project4.png') center/cover no-repeat;"></div>
-          <div class="s-card" style="background:url('project5.png') center/cover no-repeat;"></div>
-          <div class="s-card" style="background:url('project6.jpg') center/cover no-repeat;"></div>
-          <div class="s-card" style="background:url('project7.png') center/cover no-repeat;"></div>
           <div class="s-card" style="position:relative;overflow:hidden;"><video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="project8.mp4" type="video/mp4"></video></div>
           <div class="s-card" style="background:url('project9.png') center/cover no-repeat;"></div>
+          <div class="s-card" style="background:url('project5.png') center/cover no-repeat;"></div>
+          <div class="s-card" style="position:relative;overflow:hidden;"><video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="project2.mp4" type="video/mp4"></video></div>
+          <div class="s-card" style="background:url('project7.png') center/cover no-repeat;"></div>
+          <div class="s-card" style="background:url('project3.png') center/cover no-repeat;"></div>
+          <div class="s-card" style="background:url('project6.jpg') center/cover no-repeat;"></div>
           <div class="s-card" style="background:url('project10.png') center/cover no-repeat;"></div>
 
           <!-- Set 2 (exact duplicate — makes the loop seamless) -->
           <div class="s-card" style="background:url('project1.png') center/cover no-repeat;"></div>
-          <div class="s-card" style="position:relative;overflow:hidden;"><video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="project2.mp4" type="video/mp4"></video></div>
-          <div class="s-card" style="background:url('project3.png') center/cover no-repeat;"></div>
           <div class="s-card" style="background:url('project4.png') center/cover no-repeat;"></div>
-          <div class="s-card" style="background:url('project5.png') center/cover no-repeat;"></div>
-          <div class="s-card" style="background:url('project6.jpg') center/cover no-repeat;"></div>
-          <div class="s-card" style="background:url('project7.png') center/cover no-repeat;"></div>
           <div class="s-card" style="position:relative;overflow:hidden;"><video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="project8.mp4" type="video/mp4"></video></div>
           <div class="s-card" style="background:url('project9.png') center/cover no-repeat;"></div>
+          <div class="s-card" style="background:url('project5.png') center/cover no-repeat;"></div>
+          <div class="s-card" style="position:relative;overflow:hidden;"><video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="project2.mp4" type="video/mp4"></video></div>
+          <div class="s-card" style="background:url('project7.png') center/cover no-repeat;"></div>
+          <div class="s-card" style="background:url('project3.png') center/cover no-repeat;"></div>
+          <div class="s-card" style="background:url('project6.jpg') center/cover no-repeat;"></div>
           <div class="s-card" style="background:url('project10.png') center/cover no-repeat;"></div>
 
         </div>
