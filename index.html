@@ -67,7 +67,40 @@
     z-index: 200;
   }
 
-  .nav-logo svg { height: 22px; width: auto; display: block; }
+  /* ── NAV LOGO SWITCHER ── */
+  .logo-switcher {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    min-width: 38px; /* keeps link clickable at icon size */
+  }
+  .logo-switcher {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    min-width: 38px;
+    /* clip-path clips top & bottom at the element's edges,
+       but extends ±9999px left & right so the wide wordmark is never cropped */
+    clip-path: inset(0 -9999px 0 -9999px);
+  }
+  .logo-icon,
+  .logo-full {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 22px;
+    width: auto;
+    display: block;
+    transition: transform 0.55s cubic-bezier(0.16,1,0.3,1);
+  }
+  /* Default: hero visible → icon in frame, wordmark waits below */
+  .logo-icon { transform: translateY(0); }
+  .logo-full  { transform: translateY(150%); }
+  /* Scrolled past hero → icon exits upward, wordmark rises into frame */
+  .nav-logo.hero-passed .logo-icon { transform: translateY(-150%); }
+  .nav-logo.hero-passed .logo-full  { transform: translateY(0); }
 
   .nav-links { display: flex; gap: 3.5rem; list-style: none; }
   .nav-links a {
@@ -422,23 +455,44 @@
     opacity: 0.4;
     margin-top: 0.5rem;
   }
-  .about-photo {
-    width: 100%;
-    aspect-ratio: 3 / 4;
-    border-radius: 6px;
-    background: linear-gradient(155deg, #c9c9c9, #e8e8e8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* TO ADD PHOTO: background: url('images/team.jpg') center / cover no-repeat; */
-  }
-  .about-photo-hint {
+  /* Selected clients list */
+  .about-clients { width: 100%; }
+
+  .about-clients-title {
     font-family: var(--display);
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
+    font-size: 0.68rem;
     text-transform: uppercase;
-    opacity: 0.3;
-    color: var(--black);
+    letter-spacing: 0.15em;
+    opacity: 0.4;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid rgba(0,0,0,0.15);
+    margin-bottom: 0;
+  }
+
+  .client-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    transition: opacity 0.2s;
+  }
+  .client-row:hover { opacity: 0.6; }
+
+  .client-name {
+    font-family: var(--display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .client-city {
+    font-family: var(--body);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.35;
   }
 
   /* ══════════════════════════════════
@@ -544,7 +598,12 @@
   ══════════════════════════════════ -->
   <nav>
     <a href="#" class="nav-logo">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1108.09 60.03"><defs><style>.l{fill:#fff;}</style></defs><g><path class="l" d="M178.01,22.27c0-12.97-9.06-21.38-22.29-21.38h-45.76v58.23h14.98v-15.56h30.78c13.23,0,22.29-8.32,22.29-21.3ZM151.56,31.01h-26.62V13.46h26.62c4.49,0,11.48,0,11.48,8.81s-6.99,8.74-11.48,8.74Z"/><path class="l" d="M199.93.89l-30.03,58.23h16.47l6.24-12.4h34.86l6.24,12.4h16.55L220.14.89h-20.21ZM198.18,35.58l11.89-23.62,11.81,23.62h-23.71Z"/><path class="l" d="M283.49,12.62c15.8,0,19.8,6.57,20.63,10.98h15.23C318.43,9.13,306.78.06,283.49.06s-37.11,10.65-37.11,29.95,13.15,29.95,34.61,29.95c12.4,0,21.13-4,26.62-9.98l.67,9.15h11.06v-31.19h-36.94v9.73h21.71c-.33,4.41-6.15,10.74-20.63,10.74-19.39,0-22.13-10.98-22.13-18.05s2.66-17.72,22.13-17.72Z"/><polygon class="l" points="394.53 23.69 347.12 23.69 347.12 .89 332.14 .89 332.14 59.12 347.12 59.12 347.12 36.33 394.53 36.33 394.53 59.12 409.51 59.12 409.51 .89 394.53 .89 394.53 23.69"/><polygon class="l" points="418.98 59.12 480.54 59.12 480.54 47.23 433.96 47.23 433.96 35.42 480.54 35.42 480.54 24.6 433.96 24.6 433.96 12.79 480.54 12.79 480.54 .89 418.98 .89 418.98 59.12"/><polygon class="l" points="537.22 .89 484.65 .89 484.65 13.46 512.94 13.46 512.94 59.12 527.91 59.12 527.91 13.46 537.22 13.46 556.19 13.46 565.51 13.46 565.51 59.12 580.49 59.12 580.49 13.46 608.77 13.46 608.77 .89 556.19 .89 537.22 .89"/><rect class="l" x="613.72" y=".89" width="14.98" height="58.23"/><polygon class="l" points="635.35 59.12 650.33 59.12 650.33 40.9 691.92 40.9 691.92 28.26 650.33 28.26 650.33 13.46 696.91 13.46 696.91 .89 635.35 .89 635.35 59.12"/><rect class="l" x="701.86" y=".89" width="14.98" height="58.23"/><path class="l" d="M779.56,34.17c-1.41,9.48-8.73,13.22-21.13,13.22-15.14,0-21.63-5.49-21.63-17.47s6.41-17.3,21.63-17.3c12.48,0,19.72,3.66,21.13,13.06h15.23c-1.5-16.81-13.14-25.62-36.35-25.62-25.62,0-36.6,10.57-36.6,29.86s10.98,30.03,36.6,30.03c23.21,0,34.86-8.9,36.35-25.79h-15.23Z"/><path class="l" d="M820.45.89l-30.03,58.23h16.47l6.24-12.4h34.86l6.24,12.4h16.55L840.67.89h-20.21ZM818.71,35.58l11.89-23.62,11.81,23.62h-23.71Z"/><polygon class="l" points="857.92 13.46 886.21 13.46 886.21 59.12 901.18 59.12 901.18 13.46 929.46 13.46 929.46 .89 857.92 .89 857.92 13.46"/><rect class="l" x="934.41" y=".89" width="14.98" height="58.23"/><path class="l" d="M990.99.06c-25.62,0-36.6,10.57-36.6,29.86s10.98,30.03,36.6,30.03,36.6-10.73,36.6-30.03S1016.53.06,990.99.06ZM990.99,47.39c-15.56,0-21.63-5.49-21.63-17.47s5.99-17.3,21.63-17.3,21.63,5.49,21.63,17.3-6.07,17.47-21.63,17.47Z"/><polygon class="l" points="1093.11 .89 1093.11 44.65 1053.35 .89 1033.05 .89 1033.05 59.12 1048.03 59.12 1048.03 15.45 1087.71 59.12 1108.09 59.12 1108.09 .89 1093.11 .89"/><path class="l" d="M99.89,38.06c-2.15-1.34-6.5-1.76-12.46-1.93,0,0,.38,2.48-.03,6.02-.38,3.3-4.48,4.61-6.37,4.94-5.86,1.01-12.28,1.51-20.24,1-7.96-.51-14.47-1.57-16.68-4.2-1.98-2.35-1.64-4.77-1.64-4.77h-14.98s-.61,10.04,6.96,14.92c7.57,4.87,16.98,5.42,25.97,5.9s22.59-.66,27.64-2.2c2.25-.69,4.85-1.64,7.39-3.38,2.53-1.74,4.41-4.26,5.15-6.34.93-2.6,2.35-8.03-.71-9.94Z"/><path class="l" d="M32.04,23.77c2.13,1.34,5.74,1.11,11.38.88,0,0-.35-3.77.34-6.53.74-2.97,2.16-4.84,5.69-5.36,5.85-.87,9.83-.96,17.24-.75,7.4.21,13.08,1.02,15.68,3.27,2.15,1.86,1.9,4.69,1.9,4.69h14.98s.68-9.05-7.27-14.18C85.43,1.54,75.43.43,66.43.05c-6.77-.29-18.62.54-25.7,2.82-5.16,1.66-8.34,4.12-10.14,7.76-.82,1.65-1.64,3.87-1.41,8.01.11,2.06.93,3.9,2.87,5.12Z"/><path class="l" d="M72.13,24.66l-28.12.02-.59-.04s-.01.09-.01.1c-.12,1.03-.97,11.86,15.17,11.36l28.26-.02.59.04s0-.09.01-.1c.12-1.03.83-11.86-15.32-11.37Z"/><path class="l" d="M13.05,16.35h0s0,0,0,0C11.78,22.44,6.11,28.12,0,29.38h0c6.1,1.27,11.77,6.95,13.03,13.05h0c1.26-6.1,6.94-11.77,13.05-13.03h0c-6.1-1.26-11.78-6.94-13.04-13.04Z"/></g></svg>
+      <div class="logo-switcher">
+        <!-- Icon mark (shown while big hero logo is on screen) -->
+        <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 101.76 60.03"><g fill="white"><path d="M99.89,38.06c-2.15-1.34-6.5-1.76-12.46-1.93,0,0,.38,2.48-.03,6.02-.38,3.3-4.48,4.61-6.37,4.94-5.86,1.01-12.28,1.51-20.24,1-7.96-.51-14.47-1.57-16.68-4.2-1.99-2.35-1.64-4.77-1.64-4.77h-14.98s-.61,10.04,6.96,14.92c7.57,4.87,16.98,5.42,25.97,5.9,9,.48,22.59-.66,27.64-2.2,2.25-.69,4.85-1.64,7.39-3.38,2.54-1.74,4.41-4.26,5.15-6.34.93-2.6,2.35-8.03-.71-9.94Z"/><path d="M32.04,23.77c2.12,1.34,5.74,1.11,11.38.88,0,0-.35-3.77.34-6.53.74-2.97,2.16-4.84,5.69-5.36,5.85-.87,9.83-.96,17.24-.75,7.4.21,13.08,1.02,15.68,3.27,2.15,1.86,1.9,4.69,1.9,4.69h14.98s.68-9.05-7.27-14.18C85.43,1.54,75.43.43,66.43.05c-6.77-.29-18.62.54-25.7,2.82-5.16,1.66-8.34,4.12-10.14,7.76-.82,1.65-1.64,3.87-1.41,8.01.11,2.06.93,3.9,2.87,5.12Z"/><path d="M72.13,24.66l-28.12.02-.59-.04s-.01.09-.01.1c-.12,1.03-.97,11.86,15.17,11.36l28.26-.02.59.04s.01-.09.01-.1c.12-1.03.83-11.87-15.32-11.37Z"/><path d="M13.05,16.35h0s0,0,0,0C11.78,22.44,6.11,28.12,0,29.38h0c6.1,1.27,11.77,6.95,13.03,13.05h0c1.26-6.1,6.94-11.77,13.05-13.03h0c-6.1-1.26-11.78-6.94-13.04-13.04Z"/></g></svg>
+        <!-- Full wordmark (shown after scrolling past hero) -->
+        <svg class="logo-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1108.09 60.03"><g fill="white"><path d="M178.01,22.27c0-12.97-9.06-21.38-22.29-21.38h-45.76v58.23h14.98v-15.56h30.78c13.23,0,22.29-8.32,22.29-21.3ZM151.56,31.01h-26.62V13.46h26.62c4.49,0,11.48,0,11.48,8.81s-6.99,8.74-11.48,8.74Z"/><path d="M199.93.89l-30.03,58.23h16.47l6.24-12.4h34.86l6.24,12.4h16.55L220.14.89h-20.21ZM198.18,35.58l11.89-23.62,11.81,23.62h-23.71Z"/><path d="M283.49,12.62c15.8,0,19.8,6.57,20.63,10.98h15.23C318.43,9.13,306.78.06,283.49.06s-37.11,10.65-37.11,29.95,13.15,29.95,34.61,29.95c12.4,0,21.13-4,26.62-9.98l.67,9.15h11.06v-31.19h-36.94v9.73h21.71c-.33,4.41-6.15,10.74-20.63,10.74-19.39,0-22.13-10.98-22.13-18.05s2.66-17.72,22.13-17.72Z"/><polygon points="394.53 23.69 347.12 23.69 347.12 .89 332.14 .89 332.14 59.12 347.12 59.12 347.12 36.33 394.53 36.33 394.53 59.12 409.51 59.12 409.51 .89 394.53 .89 394.53 23.69"/><polygon points="418.98 59.12 480.54 59.12 480.54 47.23 433.96 47.23 433.96 35.42 480.54 35.42 480.54 24.6 433.96 24.6 433.96 12.79 480.54 12.79 480.54 .89 418.98 .89 418.98 59.12"/><polygon points="537.22 .89 484.65 .89 484.65 13.46 512.94 13.46 512.94 59.12 527.91 59.12 527.91 13.46 537.22 13.46 556.19 13.46 565.51 13.46 565.51 59.12 580.49 59.12 580.49 13.46 608.77 13.46 608.77 .89 556.19 .89 537.22 .89"/><rect x="613.72" y=".89" width="14.98" height="58.23"/><polygon points="635.35 59.12 650.33 59.12 650.33 40.9 691.92 40.9 691.92 28.26 650.33 28.26 650.33 13.46 696.91 13.46 696.91 .89 635.35 .89 635.35 59.12"/><rect x="701.86" y=".89" width="14.98" height="58.23"/><path d="M779.56,34.17c-1.41,9.48-8.73,13.22-21.13,13.22-15.14,0-21.63-5.49-21.63-17.47s6.41-17.3,21.63-17.3c12.48,0,19.72,3.66,21.13,13.06h15.23c-1.5-16.81-13.14-25.62-36.35-25.62-25.62,0-36.6,10.57-36.6,29.86s10.98,30.03,36.6,30.03c23.21,0,34.86-8.9,36.35-25.79h-15.23Z"/><path d="M820.45.89l-30.03,58.23h16.47l6.24-12.4h34.86l6.24,12.4h16.55L840.67.89h-20.21ZM818.71,35.58l11.89-23.62,11.81,23.62h-23.71Z"/><polygon points="857.92 13.46 886.21 13.46 886.21 59.12 901.18 59.12 901.18 13.46 929.46 13.46 929.46 .89 857.92 .89 857.92 13.46"/><rect x="934.41" y=".89" width="14.98" height="58.23"/><path d="M990.99.06c-25.62,0-36.6,10.57-36.6,29.86s10.98,30.03,36.6,30.03,36.6-10.73,36.6-30.03S1016.53.06,990.99.06ZM990.99,47.39c-15.56,0-21.63-5.49-21.63-17.47s5.99-17.3,21.63-17.3,21.63,5.49,21.63,17.3-6.07,17.47-21.63,17.47Z"/><polygon points="1093.11 .89 1093.11 44.65 1053.35 .89 1033.05 .89 1033.05 59.12 1048.03 59.12 1048.03 15.45 1087.71 59.12 1108.09 59.12 1108.09 .89 1093.11 .89"/><path d="M99.89,38.06c-2.15-1.34-6.5-1.76-12.46-1.93,0,0,.38,2.48-.03,6.02-.38,3.3-4.48,4.61-6.37,4.94-5.86,1.01-12.28,1.51-20.24,1-7.96-.51-14.47-1.57-16.68-4.2-1.98-2.35-1.64-4.77-1.64-4.77h-14.98s-.61,10.04,6.96,14.92c7.57,4.87,16.98,5.42,25.97,5.9s22.59-.66,27.64-2.2c2.25-.69,4.85-1.64,7.39-3.38,2.53-1.74,4.41-4.26,5.15-6.34.93-2.6,2.35-8.03-.71-9.94Z"/><path d="M32.04,23.77c2.13,1.34,5.74,1.11,11.38.88,0,0-.35-3.77.34-6.53.74-2.97,2.16-4.84,5.69-5.36,5.85-.87,9.83-.96,17.24-.75,7.4.21,13.08,1.02,15.68,3.27,2.15,1.86,1.9,4.69,1.9,4.69h14.98s.68-9.05-7.27-14.18C85.43,1.54,75.43.43,66.43.05c-6.77-.29-18.62.54-25.7,2.82-5.16,1.66-8.34,4.12-10.14,7.76-.82,1.65-1.64,3.87-1.41,8.01.11,2.06.93,3.9,2.87,5.12Z"/><path d="M72.13,24.66l-28.12.02-.59-.04s-.01.09-.01.1c-.12,1.03-.97,11.86,15.17,11.36l28.26-.02.59.04s0-.09.01-.1c.12-1.03.83-11.86-15.32-11.37Z"/><path d="M13.05,16.35h0s0,0,0,0C11.78,22.44,6.11,28.12,0,29.38h0c6.1,1.27,11.77,6.95,13.03,13.05h0c1.26-6.1,6.94-11.77,13.05-13.03h0c-6.1-1.26-11.78-6.94-13.04-13.04Z"/></g></svg>
+      </div>
     </a>
     <ul class="nav-links">
       <li><a href="#works">Works</a></li>
@@ -717,6 +776,11 @@
         <h3 class="service-name">UI/UX<br>Design</h3>
         <p class="service-desc">Products that make sense and feel good. User research, wireframes, prototypes, design systems — we build interfaces where beauty and usability are the same thing.</p>
       </div>
+      <div class="service-item reveal reveal-d3">
+        <span class="service-num">04</span>
+        <h3 class="service-name">Social Media<br>Management</h3>
+        <p class="service-desc">Presence that performs. We craft and manage content strategies that are visually coherent, editorially sharp, and built around your brand — not the algorithm.</p>
+      </div>
     </div>
   </section>
 
@@ -731,18 +795,23 @@
 
     <div class="about-grid">
       <div>
-        <h2 class="about-statement reveal">We make digital things look like they mean it.</h2>
-        <p class="about-body reveal reveal-d1">Spaghettification is a Berlin-based design and development studio built for brands that refuse to be ordinary. We work with digital startups and fintech companies who understand that design isn't decoration — it's infrastructure. Every pixel deliberate. Every interaction earned.</p>
-        <p class="about-body reveal reveal-d2" style="margin-top:1rem;">Founded in 2026, we believe the best work sits at the edge of craft and code. We're small by choice, hands-on by nature, and relentlessly focused on the details that separate good from unforgettable.</p>
-        <div class="about-stats reveal reveal-d3">
-          <div><div class="stat-val">10+</div><div class="stat-lbl">Projects Delivered</div></div>
-          <div><div class="stat-val">8</div><div class="stat-lbl">Happy Clients</div></div>
-          <div><div class="stat-val">3</div><div class="stat-lbl">Disciplines</div></div>
-          <div><div class="stat-val">'26</div><div class="stat-lbl">Founded</div></div>
-        </div>
+        <h2 class="about-statement reveal">Design is the difference between being seen and being remembered.</h2>
+        <p class="about-body reveal reveal-d1">Spaghettification is the studio of Laura Angeli, Creative Director and founder. Built in Berlin in 2026 with one conviction: that great design is never decoration — it's infrastructure. We work with digital startups and fintech companies, and bring in the right collaborators for the right projects — keeping the team lean, the thinking sharp, and the work uncompromising.</p>
       </div>
-      <div class="about-photo reveal reveal-d2">
-        <p class="about-photo-hint">Your photo here</p>
+
+      <!-- Selected clients -->
+      <div class="about-clients reveal reveal-d2">
+        <p class="about-clients-title">Selected Clients</p>
+        <div class="client-row"><span class="client-name">Warner Music</span><span class="client-city">Mexico City</span></div>
+        <div class="client-row"><span class="client-name">Warsteiner</span><span class="client-city">Berlin</span></div>
+        <div class="client-row"><span class="client-name">Food Spring</span><span class="client-city">Berlin</span></div>
+        <div class="client-row"><span class="client-name">Biotikur</span><span class="client-city">Berlin</span></div>
+        <div class="client-row"><span class="client-name">EasyPZ</span><span class="client-city">New York</span></div>
+        <div class="client-row"><span class="client-name">Napoleon Komplex</span><span class="client-city">Berlin</span></div>
+        <div class="client-row"><span class="client-name">Biblioteca Ostinata</span><span class="client-city">Milano</span></div>
+        <div class="client-row"><span class="client-name">Incandescent</span><span class="client-city">New York</span></div>
+        <div class="client-row"><span class="client-name">Kuyua</span><span class="client-city">Hamburg</span></div>
+        <div class="client-row"><span class="client-name">Flightpal</span><span class="client-city">Dubai</span></div>
       </div>
     </div>
   </section>
@@ -803,6 +872,18 @@
       mobileMenu.classList.remove('open');
       document.body.style.overflow = '';
     }
+
+    // ── LOGO SWITCHER: icon ↔ wordmark based on hero logo visibility ──
+    (function() {
+      const heroLogo = document.querySelector('.giant-logo');
+      const navLogo  = document.querySelector('.nav-logo');
+      if (!heroLogo || !navLogo) return;
+      const logoObserver = new IntersectionObserver(function(entries) {
+        // When the giant hero logo leaves the viewport, show the full wordmark
+        navLogo.classList.toggle('hero-passed', !entries[0].isIntersecting);
+      }, { threshold: 0 });
+      logoObserver.observe(heroLogo);
+    })();
   </script>
 
 </body>
