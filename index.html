@@ -370,6 +370,7 @@
     gap: 2rem;
   }
   .work-row:last-child { border-bottom: 1px solid rgba(255,255,255,0.15); }
+  a.work-row { text-decoration: none; color: inherit; }
   .work-row:hover { opacity: 0.45; }
   .work-row-title {
     font-family: var(--display);
@@ -723,10 +724,10 @@
 
     <!-- Bottom labels — spread across the hero footer -->
     <div class="hero-labels">
+      <span class="hero-label">Berlin based<br>design studio since 2026</span>
       <span class="hero-label">Brand &amp;<br>Visual Identity</span>
-      <span class="hero-label">Web Design &amp;<br>Development</span>
+      <span class="hero-label" style="text-align:right;">Web Design &amp;<br>Development</span>
       <span class="hero-label" style="text-align:right;">UI/UX<br>Design</span>
-      <span class="hero-label" style="text-align:right;">Social media<br>Management</span>
     </div>
 
   </section>
@@ -746,7 +747,7 @@
       <span class="section-tag">01 — Selected Works</span>
       <h2 class="section-title">Works</h2>
     </div>
-  
+
     <div class="works-list">
 
       <a href="kuyua.html" class="work-row reveal reveal-d1" data-key="kuyua">
@@ -755,47 +756,47 @@
           <span class="work-row-cat">Brand Identity, Product Design</span>
           <span class="work-row-year">2025</span>
         </div>
-      </div>
+      </a>
 
-      <a href="piantala.html" class="work-row reveal reveal-d1" data-key="piantala">
+      <a href="piantala.html" class="work-row reveal reveal-d2" data-key="piantala">
         <span class="work-row-title">Piantala</span>
         <div class="work-row-meta">
           <span class="work-row-cat">Brand Identity, Web Design</span>
           <span class="work-row-year">2025</span>
         </div>
-      </div>
+      </a>
 
-      <a href="warner.html" class="work-row reveal reveal-d1" data-key="warner">
+      <a href="warner.html" class="work-row reveal reveal-d3" data-key="warner">
         <span class="work-row-title">Warner Music × Gorgona Records</span>
         <div class="work-row-meta">
           <span class="work-row-cat">Brand Identity</span>
           <span class="work-row-year">2023</span>
         </div>
-      </div>
+      </a>
 
-      <a href="unmatchd.html" class="work-row reveal reveal-d1" data-key="unmatchd">
+      <a href="unmatchd.html" class="work-row reveal reveal-d4" data-key="unmatchd">
         <span class="work-row-title">Unmatchd</span>
         <div class="work-row-meta">
           <span class="work-row-cat">Brand Identity, Web Design</span>
           <span class="work-row-year">2023</span>
         </div>
-      </div>
+      </a>
 
-      <a href="flightpal.html" class="work-row reveal reveal-d1" data-key="flightpal">
+      <a href="flightpal.html" class="work-row reveal reveal-d5" data-key="flightpal">
         <span class="work-row-title">Flightpal</span>
         <div class="work-row-meta">
           <span class="work-row-cat">Product Design</span>
           <span class="work-row-year">2023</span>
         </div>
-      </div>
+      </a>
 
-      <a href="notagallery.html" class="work-row reveal reveal-d1" data-key="notagallery">
+      <a href="notagallery.html" class="work-row reveal reveal-d6" data-key="notagallery">
         <span class="work-row-title">Notagallery</span>
         <div class="work-row-meta">
           <span class="work-row-cat">Brand Identity, Web Design</span>
           <span class="work-row-year">2022</span>
         </div>
-      </div>
+      </a>
 
     </div>
   </section>
@@ -933,12 +934,12 @@
       // When you have real images, replace each gradient string with:
       // "url('works/kuyua.jpg') center/cover no-repeat"
       const previews = {
-        kuyua:       "url('kuyua.png') center/cover no-repeat",
-        piantala:    "url('piantala.png') center/cover no-repeat",
-        warner:      "url('warner.png') center/cover no-repeat",
-        unmatchd:    "url('unmatchd.png') center/cover no-repeat",
-        flightpal:   "url('flightpal.png') center/cover no-repeat",
-        notagallery: "url('notagallery.png') center/cover no-repeat",
+        kuyua:       'linear-gradient(135deg, #0d0d2b 0%, #000aff 100%)',
+        piantala:    'linear-gradient(135deg, #1a0a00 0%, #ff6b00 100%)',
+        warner:      'linear-gradient(135deg, #0a0a0a 0%, #c0392b 100%)',
+        unmatchd:    'linear-gradient(135deg, #001a0d 0%, #00c97a 100%)',
+        flightpal:   'linear-gradient(135deg, #00101a 0%, #00b4d8 100%)',
+        notagallery: 'linear-gradient(135deg, #100010 0%, #9b59b6 100%)',
       };
 
       let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
