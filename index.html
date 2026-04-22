@@ -930,16 +930,14 @@
       preview.className = 'work-preview';
       document.body.appendChild(preview);
 
-      // ─ Placeholder backgrounds per project ─
-      // When you have real images, replace each gradient string with:
-      // "url('works/kuyua.jpg') center/cover no-repeat"
+      // ─ Project hover preview images ─
       const previews = {
-        kuyua:       'linear-gradient(135deg, #0d0d2b 0%, #000aff 100%)',
-        piantala:    'linear-gradient(135deg, #1a0a00 0%, #ff6b00 100%)',
-        warner:      'linear-gradient(135deg, #0a0a0a 0%, #c0392b 100%)',
-        unmatchd:    'linear-gradient(135deg, #001a0d 0%, #00c97a 100%)',
-        flightpal:   'linear-gradient(135deg, #00101a 0%, #00b4d8 100%)',
-        notagallery: 'linear-gradient(135deg, #100010 0%, #9b59b6 100%)',
+        kuyua:       "url('hover-kuyua.png') center/cover no-repeat",
+        piantala:    "url('hover-piantala.png') center/cover no-repeat",
+        warner:      "url('hover-warner.png') center/cover no-repeat",
+        unmatchd:    "url('hover-unmatchd.png') center/cover no-repeat",
+        flightpal:   "url('hover-flightpal.png') center/cover no-repeat",
+        notagallery: "url('hover-notagallery.png') center/cover no-repeat",
       };
 
       let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
