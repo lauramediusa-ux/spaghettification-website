@@ -332,41 +332,71 @@
   ══════════════════════════════════ */
   #works { background: var(--black); color: var(--white); }
 
-  .works-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.6rem;
-  }
-  .work-card { cursor: pointer; }
-  .work-thumb {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    border-radius: 6px;
+  /* ── WORKS HOVER PREVIEW ── */
+  .work-preview {
+    position: fixed;
+    width: 380px;
+    height: 260px;
+    pointer-events: none;
+    z-index: 10000;
+    border-radius: 3px;
     overflow: hidden;
-    margin-bottom: 1.1rem;
-    transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
-    /* TO ADD IMAGE: background: url('images/project.jpg') center / cover no-repeat; */
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+    transition: opacity 0.4s cubic-bezier(0.16,1,0.3,1),
+                transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
-  .work-card:hover .work-thumb { transform: scale(0.97); }
-  .work-divider {
+  .work-preview.visible {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  /* Never show the preview on touch devices */
+  @media (hover: none) { .work-preview { display: none; } }
+
+  /* ── WORKS LIST ── */
+  .works-list { width: 100%; }
+  .work-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-top: 1px solid rgba(255,255,255,0.12);
-    padding-top: 0.9rem;
+    padding: 2.4rem 0;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    cursor: pointer;
+    transition: opacity 0.25s;
+    gap: 2rem;
   }
-  .work-title {
+  .work-row:last-child { border-bottom: 1px solid rgba(255,255,255,0.15); }
+  .work-row:hover { opacity: 0.45; }
+  .work-row-title {
     font-family: var(--display);
-    font-size: 0.92rem;
+    font-size: clamp(1.3rem, 2.4vw, 2rem);
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
   }
-  .work-cat {
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+  .work-row-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 2rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .work-row-cat {
+    font-family: var(--body);
+    font-size: clamp(0.8rem, 1vw, 0.95rem);
+    font-weight: 400;
+    opacity: 0.9;
+  }
+  .work-row-year {
+    font-family: var(--body);
+    font-size: clamp(0.8rem, 1vw, 0.95rem);
     opacity: 0.4;
+    min-width: 2.8rem;
+    text-align: right;
   }
 
   /* ══════════════════════════════════
@@ -562,29 +592,48 @@
   @media (max-width: 1024px) {
     .service-item { grid-template-columns: 50px 1fr; }
     .service-desc { grid-column: 2; padding-top: 0; margin-top: -0.5rem; }
-    .works-grid { grid-template-columns: repeat(2, 1fr); }
+    .work-row-title { font-size: clamp(1rem, 3.5vw, 1.4rem); }
   }
 
   @media (max-width: 768px) {
+    /* ── NAV ── */
     nav { padding: 1.5rem; }
     .nav-links { display: none; }
     .nav-burger { display: flex; }
 
-    .hero { padding-top: 90px; }
-    .hero-middle { gap: 1.5rem; }
-    .giant-logo { width: 98vw; padding: 0 1vw; }
-    .s-card { width: 220px; height: 220px; }
-    .hero-labels { padding: 0 1.5rem 2rem; gap: 1rem; flex-wrap: wrap; }
+    /* On mobile: always show the icon, never switch to the full wordmark */
+    .logo-full { display: none; }
+    .nav-logo.hero-passed .logo-icon { transform: translateY(0); }
+
+    /* ── HERO ── */
+    .hero { padding-top: 80px; }
+    .hero-middle { gap: 2rem; padding: 1rem 0 0; }
+    .giant-logo { width: 96vw; padding: 0 2vw; }
+
+    /* Cards: nearly full-width squares — big and impactful */
+    .s-card { width: 90vw; height: 90vw; }
+
+    /* Slow the strip — bigger cards need more time to appreciate */
+    .scroll-track { animation-duration: 40s; }
+
+    /* Labels row */
+    .hero-labels {
+      padding: 1.5rem 1.5rem 2rem;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+    }
     .hero-label { font-size: 0.65rem; white-space: normal; }
     .scatter-label { display: none; }
 
+    /* ── SECTIONS ── */
     .section { padding: 5rem 1.5rem; }
-    .works-grid { grid-template-columns: 1fr; }
+    /* works list stacks on mobile */
+    .work-row { flex-direction: column; align-items: flex-start; gap: 0.5rem; padding: 1.8rem 0; }
+    .work-row-meta { white-space: normal; }
+    .work-row-year { text-align: left; }
     .service-item { grid-template-columns: 1fr; gap: 1rem; padding: 2.5rem 0; }
     .service-num { padding-top: 0; }
     .about-grid { grid-template-columns: 1fr; gap: 3rem; }
-    .about-photo { aspect-ratio: 4 / 3; }
-    .about-stats { grid-template-columns: repeat(2, 1fr); }
     .contact-cta { font-size: clamp(2.8rem, 14vw, 5rem); }
     footer { flex-direction: column; gap: 1rem; text-align: center; }
     .footer-links { gap: 1.5rem; }
@@ -697,56 +746,55 @@
       <h2 class="section-title">Works</h2>
     </div>
 
-    <div class="works-grid">
+    <div class="works-list">
 
-      <!-- CARD 1 — TO ADD YOUR IMAGE: change style to: background: url('images/project1.jpg') center/cover no-repeat -->
-      <article class="work-card reveal reveal-d1">
-        <div class="work-thumb" style="background:linear-gradient(145deg,#1a1a2e,#16213e);"></div>
-        <div class="work-divider">
-          <span class="work-title">Project Name</span>
-          <span class="work-cat">Brand — 2025</span>
+      <div class="work-row reveal reveal-d1" data-key="kuyua">
+        <span class="work-row-title">Kuyua</span>
+        <div class="work-row-meta">
+          <span class="work-row-cat">Brand Identity, Product Design</span>
+          <span class="work-row-year">2025</span>
         </div>
-      </article>
+      </div>
 
-      <article class="work-card reveal reveal-d2">
-        <div class="work-thumb" style="background:linear-gradient(145deg,#1a0505,#e63946);"></div>
-        <div class="work-divider">
-          <span class="work-title">Project Name</span>
-          <span class="work-cat">Web — 2025</span>
+      <div class="work-row reveal reveal-d2" data-key="piantala">
+        <span class="work-row-title">Piantala</span>
+        <div class="work-row-meta">
+          <span class="work-row-cat">Brand Identity, Web Design</span>
+          <span class="work-row-year">2025</span>
         </div>
-      </article>
+      </div>
 
-      <article class="work-card reveal reveal-d3">
-        <div class="work-thumb" style="background:linear-gradient(145deg,#051220,#0f3460);"></div>
-        <div class="work-divider">
-          <span class="work-title">Project Name</span>
-          <span class="work-cat">UI/UX — 2025</span>
+      <div class="work-row reveal reveal-d3" data-key="warner">
+        <span class="work-row-title">Warner Music × Gorgona Records</span>
+        <div class="work-row-meta">
+          <span class="work-row-cat">Brand Identity</span>
+          <span class="work-row-year">2023</span>
         </div>
-      </article>
+      </div>
 
-      <article class="work-card reveal reveal-d4">
-        <div class="work-thumb" style="background:linear-gradient(145deg,#051a10,#00b894);"></div>
-        <div class="work-divider">
-          <span class="work-title">Project Name</span>
-          <span class="work-cat">Brand — 2026</span>
+      <div class="work-row reveal reveal-d4" data-key="unmatchd">
+        <span class="work-row-title">Unmatchd</span>
+        <div class="work-row-meta">
+          <span class="work-row-cat">Brand Identity, Web Design</span>
+          <span class="work-row-year">2023</span>
         </div>
-      </article>
+      </div>
 
-      <article class="work-card reveal reveal-d5">
-        <div class="work-thumb" style="background:linear-gradient(145deg,#120512,#a29bfe);"></div>
-        <div class="work-divider">
-          <span class="work-title">Project Name</span>
-          <span class="work-cat">UI/UX — 2026</span>
+      <div class="work-row reveal reveal-d5" data-key="flightpal">
+        <span class="work-row-title">Flightpal</span>
+        <div class="work-row-meta">
+          <span class="work-row-cat">Product Design</span>
+          <span class="work-row-year">2023</span>
         </div>
-      </article>
+      </div>
 
-      <article class="work-card reveal reveal-d6">
-        <div class="work-thumb" style="background:linear-gradient(145deg,#1a1200,#fdcb6e);"></div>
-        <div class="work-divider">
-          <span class="work-title">Project Name</span>
-          <span class="work-cat">Web — 2026</span>
+      <div class="work-row reveal reveal-d6" data-key="notagallery">
+        <span class="work-row-title">Notagallery</span>
+        <div class="work-row-meta">
+          <span class="work-row-cat">Brand Identity, Web Design</span>
+          <span class="work-row-year">2022</span>
         </div>
-      </article>
+      </div>
 
     </div>
   </section>
@@ -873,6 +921,59 @@
       document.body.style.overflow = '';
     }
 
+    // ── WORKS HOVER PREVIEW ──
+    (function() {
+      // Create the preview element in JS so it's always available
+      const preview = document.createElement('div');
+      preview.className = 'work-preview';
+      document.body.appendChild(preview);
+
+      // ─ Placeholder backgrounds per project ─
+      // When you have real images, replace each gradient string with:
+      // "url('works/kuyua.jpg') center/cover no-repeat"
+      const previews = {
+        kuyua:       'linear-gradient(135deg, #0d0d2b 0%, #000aff 100%)',
+        piantala:    'linear-gradient(135deg, #1a0a00 0%, #ff6b00 100%)',
+        warner:      'linear-gradient(135deg, #0a0a0a 0%, #c0392b 100%)',
+        unmatchd:    'linear-gradient(135deg, #001a0d 0%, #00c97a 100%)',
+        flightpal:   'linear-gradient(135deg, #00101a 0%, #00b4d8 100%)',
+        notagallery: 'linear-gradient(135deg, #100010 0%, #9b59b6 100%)',
+      };
+
+      let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
+      let animating = false;
+
+      // Smooth follow with lerp
+      function lerp(a, b, t) { return a + (b - a) * t; }
+      function animate() {
+        currentX = lerp(currentX, targetX, 0.1);
+        currentY = lerp(currentY, targetY, 0.1);
+        preview.style.left = currentX + 'px';
+        preview.style.top  = currentY + 'px';
+        if (animating) requestAnimationFrame(animate);
+      }
+
+      document.addEventListener('mousemove', (e) => {
+        const pw = 380, ph = 260, offset = 28;
+        targetX = Math.min(e.clientX + offset, window.innerWidth  - pw - 16);
+        targetY = Math.max(e.clientY - ph / 2, 10);
+        targetY = Math.min(targetY, window.innerHeight - ph - 10);
+      });
+
+      document.querySelectorAll('.work-row[data-key]').forEach(row => {
+        row.addEventListener('mouseenter', () => {
+          preview.style.background = previews[row.dataset.key] || '#222';
+          preview.classList.add('visible');
+          animating = true;
+          animate();
+        });
+        row.addEventListener('mouseleave', () => {
+          preview.classList.remove('visible');
+          animating = false;
+        });
+      });
+    })();
+
     // ── LOGO SWITCHER: icon ↔ wordmark based on hero logo visibility ──
     (function() {
       const heroLogo = document.querySelector('.giant-logo');
@@ -885,6 +986,8 @@
       logoObserver.observe(heroLogo);
     })();
   </script>
+
+
 
 </body>
 </html>
