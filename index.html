@@ -597,38 +597,61 @@
 
 
   /* ══════════════════════════════════
+     CONTACT
+  ══════════════════════════════════ */
+  #contact {
+    background: var(--black);
+    color: var(--white);
+    text-align: center;
+    padding: 8rem 3rem 6rem;
+  }
+  .contact-eyebrow {
+    font-family: var(--display);
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.4;
+    margin-bottom: 2rem;
+  }
+  .contact-cta {
+    font-family: var(--display);
+    font-size: clamp(3.5rem, 9vw, 10rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.04em;
+    line-height: 0.88;
+    margin-bottom: 3.5rem;
+  }
+  .contact-email {
+    display: inline-block;
+    font-family: var(--display);
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: white;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.35);
+    padding-bottom: 0.25rem;
+    transition: border-color 0.3s, opacity 0.3s;
+  }
+  .contact-email:hover { border-color: white; opacity: 0.7; }
+
+  /* ══════════════════════════════════
      FOOTER
   ══════════════════════════════════ */
   footer {
-    background: #fff;
-    color: var(--blue);
-    padding: 5rem 3rem 0;
-  }
-  .footer-top {
+    background: var(--black);
+    color: var(--white);
+    padding: 1.5rem 3rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-family: var(--body);
-    font-size: 0.85rem;
-    margin-bottom: 5rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
   }
   .footer-links { display: flex; gap: 2rem; }
-  footer a { color: var(--blue); text-decoration: none; transition: opacity 0.2s; }
-  footer a:hover { opacity: 0.6; }
-  .footer-copy { font-family: var(--body); font-size: 0.85rem; color: var(--blue); }
-  .footer-email {
-    display: block;
-    font-family: var(--display);
-    font-weight: 700;
-    font-size: 5.55vw;
-    color: var(--blue);
-    text-decoration: none;
-    border-bottom: 2.5px solid var(--blue);
-    line-height: 1.15;
-    white-space: nowrap;
-    transition: opacity 0.2s;
-  }
-  .footer-email:hover { opacity: 0.6; }
+  footer a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.8rem; transition: opacity 0.2s; }
+  footer a:hover { color: white; }
+  .footer-copy { font-size: 0.8rem; opacity: 0.35; }
 
   /* ══════════════════════════════════
      RESPONSIVE
@@ -682,9 +705,8 @@
     .team-cards { grid-template-columns: repeat(2, 1fr); margin: 4rem 0; gap: 8px; }
     .tc:last-child { grid-column: 1 / -1; aspect-ratio: 2 / 1; }
     .contact-cta { font-size: clamp(2.8rem, 14vw, 5rem); }
-    footer { padding: 3rem 1.5rem 0; }
-    .footer-top { flex-direction: column; gap: 0.8rem; align-items: flex-start; margin-bottom: 3rem; }
-    .footer-links { gap: 1.2rem; flex-wrap: wrap; }
+    footer { flex-direction: column; gap: 1rem; padding: 1.5rem; text-align: center; }
+    .footer-links { gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
   }
 </style>
 </head>
@@ -706,6 +728,7 @@
       <li><a href="#works">Works</a></li>
       <li><a href="#services">Services</a></li>
       <li><a href="#about">About Us</a></li>
+      <li><a href="#contact">Contact</a></li>
     </ul>
     <div class="nav-burger" id="burger" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -717,6 +740,7 @@
     <a href="#works"    onclick="closeMobile()">Works</a>
     <a href="#services" onclick="closeMobile()">Services</a>
     <a href="#about"    onclick="closeMobile()">About</a>
+    <a href="#contact"  onclick="closeMobile()">Contact</a>
   </div>
 
   <!-- ══════════════════════════════════
@@ -973,21 +997,27 @@
   </section>
 
   <!-- ══════════════════════════════════
+       CONTACT
+  ══════════════════════════════════ -->
+  <section id="contact">
+    <p class="contact-eyebrow reveal">— Get in touch</p>
+    <h2 class="contact-cta reveal reveal-d1">Let's<br>Work<br>Together.</h2>
+    <a href="mailto:hello@spaghettification.studio" class="contact-email reveal reveal-d2">
+      hello@spaghettification.studio
+    </a>
+  </section>
+
+  <!-- ══════════════════════════════════
        FOOTER
   ══════════════════════════════════ -->
   <footer>
-    <div class="footer-top">
-      <div class="footer-links">
-        <a href="#">Jobs</a>
-        <a href="#">Privacy</a>
-        <a href="#">Imprint</a>
-        <a href="#" target="_blank">LinkedIn</a>
-      </div>
-      <span class="footer-copy">© 2026 Spaghettification</span>
+    <div class="footer-links">
+      <a href="#">Jobs</a>
+      <a href="#">Imprint</a>
+      <a href="#">Privacy</a>
+      <a href="#" target="_blank">LinkedIn</a>
     </div>
-    <a href="mailto:hello@spaghettification.studio" class="footer-email">
-      hello@spaghettification.studio
-    </a>
+    <span class="footer-copy">© 2026 Spaghettification</span>
   </footer>
 
   <!-- ══════════════════════════════════
@@ -1071,25 +1101,6 @@
           animating = false;
         });
       });
-    })();
-
-    // ── FOOTER EMAIL: fit text to full container width ──
-    (function() {
-      const el = document.querySelector('.footer-email');
-      if (!el) return;
-      function fit() {
-        el.style.fontSize = '10px';
-        const max = el.parentElement.clientWidth;
-        let lo = 10, hi = 400, mid;
-        while (lo < hi - 1) {
-          mid = Math.floor((lo + hi) / 2);
-          el.style.fontSize = mid + 'px';
-          if (el.scrollWidth <= max) lo = mid; else hi = mid;
-        }
-        el.style.fontSize = lo + 'px';
-      }
-      fit();
-      window.addEventListener('resize', fit);
     })();
 
     // ── LOGO SWITCHER: icon ↔ wordmark based on hero logo visibility ──
