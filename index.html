@@ -336,8 +336,8 @@
   /* ── WORKS HOVER PREVIEW ── */
   .work-preview {
     position: fixed;
-    width: 380px;
-    height: 260px;
+    width: 190px;
+    height: 130px;
     pointer-events: none;
     z-index: 10000;
     border-radius: 3px;
@@ -1083,7 +1083,7 @@
       }
 
       document.addEventListener('mousemove', (e) => {
-        const pw = 380, ph = 260, offset = 28;
+        const pw = 190, ph = 130, offset = 20;
         targetX = Math.min(e.clientX + offset, window.innerWidth  - pw - 16);
         targetY = Math.max(e.clientY - ph / 2, 10);
         targetY = Math.min(targetY, window.innerHeight - ph - 10);
