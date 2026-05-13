@@ -536,63 +536,121 @@
     line-height: 1.3;
   }
   /* ══════════════════════════════════
-     CLIENTS MARQUEE
+     CLIENTS + PROCESS
   ══════════════════════════════════ */
   #clients {
-    background: var(--black);
-    color: var(--white);
-    padding: 5rem 0;
-    overflow: hidden;
+    background: var(--light);
+    color: var(--black);
+    padding: 4rem 3rem 6rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 5rem;
+    align-items: start;
   }
+
+  /* — Process (left) — */
+  .process-col { grid-column: 1; }
+  .process-label {
+    font-family: var(--display);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    opacity: 0.35;
+    margin-bottom: 1.5rem;
+  }
+  .process-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+  }
+  .process-step { padding-right: 1.2rem; margin-bottom: 2.5rem; }
+  .process-step-num {
+    font-family: var(--display);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    opacity: 0.35;
+    margin-bottom: 0.6rem;
+  }
+  .process-step-line {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.9rem;
+    position: relative;
+  }
+  .process-step-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--blue);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .process-step-rule {
+    flex: 1;
+    height: 1px;
+    background: rgba(0,0,0,0.15);
+    margin-left: 0;
+  }
+  .process-step-name {
+    font-family: var(--display);
+    font-size: clamp(0.95rem, 1.3vw, 1.15rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    color: var(--black);
+    margin-bottom: 0.45rem;
+  }
+  .process-step-desc {
+    font-family: var(--body);
+    font-size: 0.78rem;
+    line-height: 1.65;
+    color: var(--black);
+    opacity: 0.55;
+  }
+
+  /* — Clients (right) — */
+  .clients-col { grid-column: 2; }
   #clients .clients-label {
     font-family: var(--display);
     font-size: 0.68rem;
     text-transform: uppercase;
     letter-spacing: 0.2em;
-    opacity: 0.3;
-    text-align: center;
-    margin-bottom: 3.5rem;
+    opacity: 0.35;
+    margin-bottom: 1.5rem;
   }
-  .marquee-track {
+  .clients-list {
+    list-style: none;
+    border-top: 1px solid rgba(0,0,0,0.12);
+    margin-top: 3.2rem;
+  }
+  .clients-list li {
+    border-bottom: 1px solid rgba(0,0,0,0.12);
+    padding: 0.75rem 0;
     display: flex;
-    width: max-content;
-    animation: marquee-scroll 22s linear infinite;
-  }
-  .marquee-track:hover { animation-play-state: paused; }
-  @keyframes marquee-scroll {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
-  }
-  .marquee-set {
-    display: flex;
-    align-items: center;
-    gap: 0;
-  }
-  .marquee-item {
-    display: flex;
-    align-items: center;
-    padding: 0 4rem;
-    border-right: 1px solid rgba(255,255,255,0.1);
-    height: 80px;
-    transition: opacity 0.3s;
-  }
-  .marquee-item:hover { opacity: 0.6; }
-  .marquee-item img {
-    height: 28px;
-    width: auto;
-    max-width: 160px;
-    object-fit: contain;
-    filter: invert(1) brightness(1);
-    opacity: 0.85;
-  }
-  .marquee-item-text {
+    justify-content: space-between;
+    align-items: baseline;
     font-family: var(--display);
-    font-size: 1.1rem;
+    font-size: clamp(0.95rem, 1.3vw, 1.15rem);
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    opacity: 0.7;
-    white-space: nowrap;
+    letter-spacing: -0.01em;
+    color: var(--black);
+    opacity: 0.75;
+    transition: opacity 0.25s, padding-left 0.3s cubic-bezier(0.16,1,0.3,1);
+    cursor: default;
+  }
+  .clients-list li:hover {
+    opacity: 1;
+    padding-left: 0.5rem;
+  }
+  .client-city {
+    font-family: var(--body);
+    font-size: 0.72rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    opacity: 0.45;
   }
 
 
@@ -971,29 +1029,71 @@
        CLIENTS
   ══════════════════════════════════ -->
   <section id="clients">
-    <p class="clients-label">Selected Clients</p>
-    <div class="marquee-track">
-      <!-- set 1 -->
-      <div class="marquee-set">
-        <div class="marquee-item"><img src="client-warner.png"      alt="Warner Music"></div>
-        <div class="marquee-item"><img src="client-warsteiner.png"  alt="Warsteiner"></div>
-        <div class="marquee-item"><img src="client-foodspring.png"  alt="Food Spring"></div>
-        <div class="marquee-item"><span class="marquee-item-text">Biotikur</span></div>
-        <div class="marquee-item"><span class="marquee-item-text">EasyPZ</span></div>
-        <div class="marquee-item"><span class="marquee-item-text">Biblioteca Ostinata</span></div>
-        <div class="marquee-item"><img src="client-incandescent.svg" alt="Incandescent"></div>
-      </div>
-      <!-- set 2 — exact duplicate for seamless loop -->
-      <div class="marquee-set">
-        <div class="marquee-item"><img src="client-warner.png"      alt="Warner Music"></div>
-        <div class="marquee-item"><img src="client-warsteiner.png"  alt="Warsteiner"></div>
-        <div class="marquee-item"><img src="client-foodspring.png"  alt="Food Spring"></div>
-        <div class="marquee-item"><span class="marquee-item-text">Biotikur</span></div>
-        <div class="marquee-item"><span class="marquee-item-text">EasyPZ</span></div>
-        <div class="marquee-item"><span class="marquee-item-text">Biblioteca Ostinata</span></div>
-        <div class="marquee-item"><img src="client-incandescent.svg" alt="Incandescent"></div>
+
+    <!-- LEFT: How We Work -->
+    <div class="process-col">
+      <p class="process-label">How We Work</p>
+      <div class="process-grid">
+
+        <div class="process-step">
+          <p class="process-step-num">Step 1</p>
+          <div class="process-step-line"><div class="process-step-dot"></div><div class="process-step-rule"></div></div>
+          <p class="process-step-name">Research</p>
+          <p class="process-step-desc">We start by understanding the problem space — the client's field, audience, and competitive landscape.</p>
+        </div>
+
+        <div class="process-step">
+          <p class="process-step-num">Step 2</p>
+          <div class="process-step-line"><div class="process-step-dot"></div><div class="process-step-rule"></div></div>
+          <p class="process-step-name">Team</p>
+          <p class="process-step-desc">We assemble the right people for the job — specialists who bring complementary skills and a shared design vision.</p>
+        </div>
+
+        <div class="process-step">
+          <p class="process-step-num">Step 3</p>
+          <div class="process-step-line"><div class="process-step-dot"></div><div class="process-step-rule"></div></div>
+          <p class="process-step-name">Workshop</p>
+          <p class="process-step-desc">A tailored session to surface the client's goals, brand perception, and what success actually looks like.</p>
+        </div>
+
+        <div class="process-step">
+          <p class="process-step-num">Step 4</p>
+          <div class="process-step-line"><div class="process-step-dot"></div><div class="process-step-rule"></div></div>
+          <p class="process-step-name">Routes</p>
+          <p class="process-step-desc">We present a range of creative directions — different styles and approaches for the client to explore and react to.</p>
+        </div>
+
+        <div class="process-step">
+          <p class="process-step-num">Step 5</p>
+          <div class="process-step-line"><div class="process-step-dot"></div><div class="process-step-rule"></div></div>
+          <p class="process-step-name">Refinement</p>
+          <p class="process-step-desc">We narrow in on the chosen direction, polishing the visual design and building out the full style system.</p>
+        </div>
+
+        <div class="process-step">
+          <p class="process-step-num">Step 6</p>
+          <div class="process-step-line"><div class="process-step-dot"></div><div class="process-step-rule"></div></div>
+          <p class="process-step-name">Launch</p>
+          <p class="process-step-desc">Final delivery, content creation, and rollout across all relevant platforms. Then we celebrate.</p>
+        </div>
+
       </div>
     </div>
+
+    <!-- RIGHT: Clients -->
+    <div class="clients-col">
+      <p class="clients-label">Selected Clients</p>
+      <ul class="clients-list">
+        <li><span>Warner Music</span><span class="client-city">Mexico City</span></li>
+        <li><span>Warsteiner</span><span class="client-city">Berlin</span></li>
+        <li><span>Food Spring</span><span class="client-city">Berlin</span></li>
+        <li><span>Biotikur</span><span class="client-city">Berlin</span></li>
+        <li><span>EasyPZ</span><span class="client-city">New York</span></li>
+        <li><span>Biblioteca Ostinata</span><span class="client-city">Milano</span></li>
+        <li><span>Incandescent</span><span class="client-city">New York</span></li>
+      </ul>
+    </div>
+
   </section>
 
   <!-- ══════════════════════════════════
