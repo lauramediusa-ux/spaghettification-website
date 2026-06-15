@@ -235,7 +235,14 @@
     .nav-links { display: none; }
     .nav-burger { display: flex; }
 
+    /* On mobile: always show the icon, never the full wordmark (too wide) */
+    .logo-full { display: none; }
+    .nav-logo.hero-passed .logo-icon { transform: translateY(0); }
+
+    /* Show images first, text second on mobile */
     .project-layout { grid-template-columns: 1fr; }
+    .project-right { order: 1; }
+    .project-left  { order: 2; }
     .project-left {
       position: static;
       height: auto;
