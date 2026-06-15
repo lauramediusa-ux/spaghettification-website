@@ -765,8 +765,9 @@
     .service-num { padding-top: 0; }
     .about-sub { grid-template-columns: 1fr; gap: 1.5rem; }
     .about-founded { text-align: left; }
-    .team-cards { grid-template-columns: repeat(2, 1fr); margin: 4rem 0; gap: 8px; }
-    .tc:last-child { grid-column: 1 / -1; aspect-ratio: 2 / 1; }
+    /* one column, every card the same landscape size */
+    .team-cards { grid-template-columns: 1fr; margin: 4rem 0; gap: 10px; }
+    .tc { aspect-ratio: 16 / 10; }
 
     /* ── CLIENTS / HOW WE WORK: full stack ── */
     #clients {
