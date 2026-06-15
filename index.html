@@ -1102,8 +1102,8 @@
   <section id="contact">
     <p class="contact-eyebrow reveal">— Get in touch</p>
     <h2 class="contact-cta reveal reveal-d1">Let's<br>Work<br>Together.</h2>
-    <a href="mailto:hello@spaghettification.studio" class="contact-email reveal reveal-d2">
-      hello@spaghettification.studio
+    <a href="mailto:laura.angeli.design@gmail.com" class="contact-email reveal reveal-d2">
+      Email
     </a>
   </section>
 
@@ -1151,6 +1151,19 @@
       mobileMenu.classList.remove('open');
       document.body.style.overflow = '';
     }
+
+
+    // ── LOGO SWITCHER: icon ↔ wordmark based on hero logo visibility ──
+    (function() {
+      const heroLogo = document.querySelector('.giant-logo');
+      const navLogo  = document.querySelector('.nav-logo');
+      if (!heroLogo || !navLogo) return;
+      const logoObserver = new IntersectionObserver(function(entries) {
+        // When the giant hero logo leaves the viewport, show the full wordmark
+        navLogo.classList.toggle('hero-passed', !entries[0].isIntersecting);
+      }, { threshold: 0 });
+      logoObserver.observe(heroLogo);
+    })();
 
     // ── WORKS HOVER PREVIEW ──
     (function() {
@@ -1201,18 +1214,6 @@
           animating = false;
         });
       });
-    })();
-
-    // ── LOGO SWITCHER: icon ↔ wordmark based on hero logo visibility ──
-    (function() {
-      const heroLogo = document.querySelector('.giant-logo');
-      const navLogo  = document.querySelector('.nav-logo');
-      if (!heroLogo || !navLogo) return;
-      const logoObserver = new IntersectionObserver(function(entries) {
-        // When the giant hero logo leaves the viewport, show the full wordmark
-        navLogo.classList.toggle('hero-passed', !entries[0].isIntersecting);
-      }, { threshold: 0 });
-      logoObserver.observe(heroLogo);
     })();
   </script>
 
