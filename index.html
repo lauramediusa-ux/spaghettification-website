@@ -718,6 +718,11 @@
     .service-item { grid-template-columns: 50px 1fr; }
     .service-desc { grid-column: 2; padding-top: 0; margin-top: -0.5rem; }
     .work-row-title { font-size: clamp(1rem, 3.5vw, 1.4rem); }
+
+    /* ── CLIENTS / HOW WE WORK: ease up before full stack ── */
+    #clients { gap: 0 2.5rem; padding: 0 2rem 5rem; }
+    .process-grid { grid-template-columns: 1fr 1fr; }
+    .process-step { padding-right: 0.8rem; }
   }
 
   @media (max-width: 768px) {
@@ -762,6 +767,19 @@
     .about-founded { text-align: left; }
     .team-cards { grid-template-columns: repeat(2, 1fr); margin: 4rem 0; gap: 8px; }
     .tc:last-child { grid-column: 1 / -1; aspect-ratio: 2 / 1; }
+
+    /* ── CLIENTS / HOW WE WORK: full stack ── */
+    #clients {
+      grid-template-columns: 1fr;
+      gap: 3.5rem 0;
+      padding: 0 1.5rem 4rem;
+    }
+    .process-col { grid-column: 1; }
+    .clients-col { grid-column: 1; }
+    .process-grid { grid-template-columns: 1fr; }
+    .process-step { padding-right: 0; margin-bottom: 2rem; }
+    .clients-list { margin-top: 1.5rem; }
+
     .contact-cta { font-size: clamp(2.8rem, 14vw, 5rem); }
     footer { flex-direction: column; gap: 1rem; padding: 1.5rem; text-align: center; }
     .footer-links { gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
