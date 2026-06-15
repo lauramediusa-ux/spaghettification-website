@@ -765,9 +765,31 @@
     .service-num { padding-top: 0; }
     .about-sub { grid-template-columns: 1fr; gap: 1.5rem; }
     .about-founded { text-align: left; }
-    /* one column, every card the same landscape size */
+    /* one column, every card the same size — photo on top, info as a bar below it */
     .team-cards { grid-template-columns: 1fr; margin: 4rem 0; gap: 10px; }
-    .tc { aspect-ratio: 16 / 10; }
+    .tc {
+      aspect-ratio: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .tc-photo {
+      position: static;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      height: auto;
+    }
+    .tc-info {
+      position: static;
+      left: auto;
+      right: auto;
+      bottom: auto;
+      background: var(--white);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border-radius: 0;
+      margin: 0;
+      padding: 0.9rem 1rem;
+    }
 
     /* ── CLIENTS / HOW WE WORK: full stack ── */
     #clients {
