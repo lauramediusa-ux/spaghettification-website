@@ -821,9 +821,66 @@
     footer { flex-direction: column; gap: 1rem; padding: 1.5rem; text-align: center; }
     .footer-links { gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
   }
+
+  /* ══════════════════════════════════
+     PRELOADER
+  ══════════════════════════════════ */
+  #preloader {
+    position: fixed;
+    inset: 0;
+    background: var(--blue);
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.75s cubic-bezier(0.76, 0, 0.24, 1);
+  }
+  #preloader.done {
+    transform: translateY(-100%);
+  }
+  .preloader-icon {
+    width: 64px;
+    opacity: 0;
+    animation: pl-fade 0.5s 0.15s ease forwards;
+  }
+  @keyframes pl-fade {
+    to { opacity: 1; }
+  }
+  .preloader-bar-wrap {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: rgba(255,255,255,0.15);
+  }
+  .preloader-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--white);
+    transition: width 0.12s linear;
+  }
 </style>
 </head>
 <body>
+
+  <!-- ══════════════════════════════════
+       PRELOADER
+  ══════════════════════════════════ -->
+  <div id="preloader">
+    <svg class="preloader-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 101.76 60.03">
+      <g fill="white">
+        <path d="M99.89,38.06c-2.15-1.34-6.5-1.76-12.46-1.93,0,0,.38,2.48-.03,6.02-.38,3.3-4.48,4.61-6.37,4.94-5.86,1.01-12.28,1.51-20.24,1-7.96-.51-14.47-1.57-16.68-4.2-1.99-2.35-1.64-4.77-1.64-4.77h-14.98s-.61,10.04,6.96,14.92c7.57,4.87,16.98,5.42,25.97,5.9,9,.48,22.59-.66,27.64-2.2,2.25-.69,4.85-1.64,7.39-3.38,2.54-1.74,4.41-4.26,5.15-6.34.93-2.6,2.35-8.03-.71-9.94Z"/>
+        <path d="M32.04,23.77c2.12,1.34,5.74,1.11,11.38.88,0,0-.35-3.77.34-6.53.74-2.97,2.16-4.84,5.69-5.36,5.85-.87,9.83-.96,17.24-.75,7.4.21,13.08,1.02,15.68,3.27,2.15,1.86,1.9,4.69,1.9,4.69h14.98s.68-9.05-7.27-14.18C85.43,1.54,75.43.43,66.43.05c-6.77-.29-18.62.54-25.7,2.82-5.16,1.66-8.34,4.12-10.14,7.76-.82,1.65-1.64,3.87-1.41,8.01.11,2.06.93,3.9,2.87,5.12Z"/>
+        <path d="M72.13,24.66l-28.12.02-.59-.04s-.01.09-.01.1c-.12,1.03-.97,11.86,15.17,11.36l28.26-.02.59.04s.01-.09.01-.1c.12-1.03.83-11.87-15.32-11.37Z"/>
+        <path d="M13.05,16.35h0s0,0,0,0C11.78,22.44,6.11,28.12,0,29.38h0c6.1,1.27,11.77,6.95,13.03,13.05h0c1.26-6.1,6.94-11.77,13.05-13.03h0c-6.1-1.26-11.78-6.94-13.04-13.04Z"/>
+      </g>
+    </svg>
+    <div class="preloader-bar-wrap">
+      <div class="preloader-bar" id="preloader-bar"></div>
+    </div>
+  </div>
 
   <!-- ══════════════════════════════════
        NAV
@@ -1179,6 +1236,44 @@
        SCRIPTS
   ══════════════════════════════════ -->
   <script>
+    /* ── PRELOADER ── */
+    (function() {
+      const loader  = document.getElementById('preloader');
+      const bar     = document.getElementById('preloader-bar');
+      if (!loader) return;
+
+      // Block scroll while loading
+      document.body.style.overflow = 'hidden';
+
+      // Simulate progress up to ~85%, then jump to 100% on load
+      let progress = 0;
+      const ticker = setInterval(() => {
+        progress = Math.min(progress + Math.random() * 12 + 3, 85);
+        bar.style.width = progress + '%';
+      }, 160);
+
+      const started = Date.now();
+      const MIN_MS  = 1000; // always show for at least 1 s
+
+      function finish() {
+        clearInterval(ticker);
+        bar.style.transition = 'width 0.35s ease';
+        bar.style.width = '100%';
+        setTimeout(() => {
+          loader.classList.add('done');
+          document.body.style.overflow = '';
+          // Start scroll reveals AFTER the curtain lifts
+          document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+          setTimeout(() => { loader.style.display = 'none'; }, 800);
+        }, 380);
+      }
+
+      window.addEventListener('load', () => {
+        const wait = Math.max(0, MIN_MS - (Date.now() - started));
+        setTimeout(finish, wait);
+      });
+    })();
+
     /* ── Scroll reveal ── */
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -1189,7 +1284,8 @@
       });
     }, { threshold: 0.08 });
 
-    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    // Note: .observe() is called inside the preloader finish callback above,
+    // so reveals only trigger once the loading curtain has lifted.
 
     /* ── Mobile menu ── */
     const burger     = document.getElementById('burger');
