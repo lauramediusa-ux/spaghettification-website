@@ -251,7 +251,7 @@
   /* no overlay on cards */
   .s-card::after { content: none; }
 
-  a.s-card { text-decoration: none; cursor: pointer; }
+  a.s-card { text-decoration: none; cursor: pointer; display: block; flex-shrink: 0; }
   .s-card:hover {
     transform: scale(1.03) translateY(-6px);
     z-index: 10;
