@@ -251,7 +251,7 @@
   /* no overlay on cards */
   .s-card::after { content: none; }
 
-  a.s-card { display: block; text-decoration: none; }
+  .s-card.linked { cursor: pointer; }
   .s-card:hover {
     transform: scale(1.03) translateY(-6px);
     z-index: 10;
@@ -742,7 +742,7 @@
     .giant-logo { width: 96vw; padding: 0 2vw; }
 
     /* Cards: nearly full-width squares — big and impactful */
-    .s-card, a.s-card { width: 90vw; height: 90vw; }
+    .s-card { width: 90vw; height: 90vw; }
 
     /* Slow the strip — bigger cards need more time to appreciate */
     .scroll-track { animation-duration: 40s; }
@@ -933,28 +933,28 @@
         <div class="scroll-track" id="scrollTrack">
 
           <!-- Set 1 — order: 1,4,8,9,5,2,7,3,6,10 -->
-          <a class="s-card" href="kuyua.html" style="background:url('project1.png') center/cover no-repeat;"></a>
-          <a class="s-card" href="flightpal.html" style="background:url('project4.png') center/cover no-repeat;"></a>
-          <a class="s-card" href="notagallery.html" style="position:relative;overflow:hidden;"><video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="project8.mp4" type="video/mp4"></video></a>
-          <a class="s-card" href="unmatchd.html" style="background:url('project9.png') center/cover no-repeat;"></a>
-          <a class="s-card" href="warner.html" style="background:url('project5.png') center/cover no-repeat;"></a>
-          <a class="s-card" href="piantala.html" style="position:relative;overflow:hidden;"><video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="project2.mp4" type="video/mp4"></video></a>
-          <a class="s-card" href="notagallery.html" style="background:url('project7.png') center/cover no-repeat;"></a>
-          <a class="s-card" href="piantala.html" style="background:url('project3.png') center/cover no-repeat;"></a>
-          <a class="s-card" href="notagallery.html" style="background:url('project6.jpg') center/cover no-repeat;"></a>
-          <a class="s-card" href="unmatchd.html" style="background:url('project10.png') center/cover no-repeat;"></a>
+          <div class="s-card linked" onclick="location.href='kuyua.html'" style="background:url('project1.png') center/cover no-repeat;"></div>
+          <div class="s-card linked" onclick="location.href='flightpal.html'" style="background:url('project4.png') center/cover no-repeat;"></div>
+          <div class="s-card linked" onclick="location.href='notagallery.html'" style="position:relative;overflow:hidden;"><video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="project8.mp4" type="video/mp4"></video></div>
+          <div class="s-card linked" onclick="location.href='unmatchd.html'" style="background:url('project9.png') center/cover no-repeat;"></div>
+          <div class="s-card linked" onclick="location.href='warner.html'" style="background:url('project5.png') center/cover no-repeat;"></div>
+          <div class="s-card linked" onclick="location.href='piantala.html'" style="position:relative;overflow:hidden;"><video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="project2.mp4" type="video/mp4"></video></div>
+          <div class="s-card linked" onclick="location.href='notagallery.html'" style="background:url('project7.png') center/cover no-repeat;"></div>
+          <div class="s-card linked" onclick="location.href='piantala.html'" style="background:url('project3.png') center/cover no-repeat;"></div>
+          <div class="s-card linked" onclick="location.href='notagallery.html'" style="background:url('project6.jpg') center/cover no-repeat;"></div>
+          <div class="s-card linked" onclick="location.href='unmatchd.html'" style="background:url('project10.png') center/cover no-repeat;"></div>
 
           <!-- Set 2 (exact duplicate — makes the loop seamless) -->
-          <a class="s-card" href="kuyua.html" style="background:url('project1.png') center/cover no-repeat;"></a>
-          <a class="s-card" href="flightpal.html" style="background:url('project4.png') center/cover no-repeat;"></a>
-          <a class="s-card" href="notagallery.html" style="position:relative;overflow:hidden;"><video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="project8.mp4" type="video/mp4"></video></a>
-          <a class="s-card" href="unmatchd.html" style="background:url('project9.png') center/cover no-repeat;"></a>
-          <a class="s-card" href="warner.html" style="background:url('project5.png') center/cover no-repeat;"></a>
-          <a class="s-card" href="piantala.html" style="position:relative;overflow:hidden;"><video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="project2.mp4" type="video/mp4"></video></a>
-          <a class="s-card" href="notagallery.html" style="background:url('project7.png') center/cover no-repeat;"></a>
-          <a class="s-card" href="piantala.html" style="background:url('project3.png') center/cover no-repeat;"></a>
-          <a class="s-card" href="notagallery.html" style="background:url('project6.jpg') center/cover no-repeat;"></a>
-          <a class="s-card" href="unmatchd.html" style="background:url('project10.png') center/cover no-repeat;"></a>
+          <div class="s-card linked" onclick="location.href='kuyua.html'" style="background:url('project1.png') center/cover no-repeat;"></div>
+          <div class="s-card linked" onclick="location.href='flightpal.html'" style="background:url('project4.png') center/cover no-repeat;"></div>
+          <div class="s-card linked" onclick="location.href='notagallery.html'" style="position:relative;overflow:hidden;"><video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="project8.mp4" type="video/mp4"></video></div>
+          <div class="s-card linked" onclick="location.href='unmatchd.html'" style="background:url('project9.png') center/cover no-repeat;"></div>
+          <div class="s-card linked" onclick="location.href='warner.html'" style="background:url('project5.png') center/cover no-repeat;"></div>
+          <div class="s-card linked" onclick="location.href='piantala.html'" style="position:relative;overflow:hidden;"><video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="project2.mp4" type="video/mp4"></video></div>
+          <div class="s-card linked" onclick="location.href='notagallery.html'" style="background:url('project7.png') center/cover no-repeat;"></div>
+          <div class="s-card linked" onclick="location.href='piantala.html'" style="background:url('project3.png') center/cover no-repeat;"></div>
+          <div class="s-card linked" onclick="location.href='notagallery.html'" style="background:url('project6.jpg') center/cover no-repeat;"></div>
+          <div class="s-card linked" onclick="location.href='unmatchd.html'" style="background:url('project10.png') center/cover no-repeat;"></div>
 
         </div>
       </div>
