@@ -360,75 +360,104 @@
   /* ══════════════════════════════════
      WORKS  (#080808)
   ══════════════════════════════════ */
-  #works { background: var(--black); color: var(--white); }
+  #works { background: var(--white); color: var(--black); }
 
-  /* ── WORKS HOVER PREVIEW ── */
-  .work-preview {
-    position: fixed;
-    width: 190px;
-    height: 130px;
-    pointer-events: none;
-    z-index: 10000;
-    border-radius: 3px;
+  /* ── WORKS TWO-COLUMN LAYOUT ── */
+  .works-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+    padding-top: 3rem;
+  }
+
+  /* Left: image panel */
+  .works-img-col {
+    position: sticky;
+    top: 6rem;
+  }
+  .works-img-wrap {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 4px;
     overflow: hidden;
-    opacity: 0;
-    transform: scale(0.95) translateY(10px);
-    transition: opacity 0.4s cubic-bezier(0.16,1,0.3,1),
-                transform 0.4s cubic-bezier(0.16,1,0.3,1);
-    background-color: #111;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background: #111;
+    position: relative;
   }
-  .work-preview.visible {
-    opacity: 1;
-    transform: scale(1) translateY(0);
+  .works-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+    transition: opacity 0.5s ease;
   }
-  /* Never show the preview on touch devices */
-  @media (hover: none) { .work-preview { display: none; } }
-
-  /* ── WORKS LIST ── */
-  .works-list { width: 100%; }
-  .work-row {
+  .works-img-wrap img.hidden { opacity: 0; }
+  .works-img-caption {
+    margin-top: 1rem;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 2.4rem 0;
-    border-top: 1px solid rgba(255,255,255,0.15);
-    cursor: pointer;
-    transition: opacity 0.25s;
-    gap: 2rem;
-  }
-  .work-row:last-child { border-bottom: 1px solid rgba(255,255,255,0.15); }
-  a.work-row { text-decoration: none; color: inherit; }
-  .work-row:hover { opacity: 0.45; }
-  .work-row-title {
-    font-family: var(--display);
-    font-size: clamp(1.3rem, 2.4vw, 2rem);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-    flex-shrink: 0;
-  }
-  .work-row-meta {
-    display: flex;
     align-items: baseline;
-    gap: 2rem;
-    white-space: nowrap;
-    flex-shrink: 0;
   }
-  .work-row-cat {
+  .works-caption-name {
     font-family: var(--body);
-    font-size: clamp(0.8rem, 1vw, 0.95rem);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--black);
+    opacity: 0.45;
+    transition: opacity 0.3s;
+  }
+  .works-caption-cat {
+    font-family: var(--body);
+    font-size: 0.8rem;
+    color: var(--black);
+    opacity: 0.25;
+    transition: opacity 0.3s;
+  }
+
+  /* Right: project list */
+  .works-nav-list {
+    list-style: none;
+    padding: 0 0 0 3rem;
+    margin: 0;
+  }
+  .works-nav-list li { overflow: hidden; }
+  .work-item {
+    display: block;
+    font-family: var(--display);
+    font-size: clamp(2.2rem, 4.5vw, 5.5rem);
     font-weight: 400;
-    opacity: 0.9;
+    text-transform: none;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+    text-decoration: none;
+    color: var(--black);
+    opacity: 0.18;
+    padding: 0.12em 0 0.12em 0.8em;
+    position: relative;
+    transition: opacity 0.3s ease;
   }
-  .work-row-year {
-    font-family: var(--body);
-    font-size: clamp(0.8rem, 1vw, 0.95rem);
-    opacity: 0.4;
-    min-width: 2.8rem;
-    text-align: right;
+  .work-item::before {
+    content: '•';
+    font-weight: 700;
+    position: absolute;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .works-nav-list:hover .work-item { opacity: 0.1; }
+  .works-nav-list:hover .work-item:hover,
+  .work-item.is-default {
+    opacity: 1;
+  }
+  .works-nav-list:hover .work-item:hover::before { opacity: 1; }
+  .work-item.is-default::before { opacity: 1; }
+
+  @media (max-width: 768px) {
+    .works-layout { grid-template-columns: 1fr; }
+    .works-img-col { position: static; }
+    .work-item { font-size: clamp(1.8rem, 8vw, 3rem); }
   }
 
   /* ══════════════════════════════════
@@ -1018,59 +1047,63 @@
   ══════════════════════════════════ -->
   <section id="works" class="section">
     <div class="section-header reveal">
-      <span class="section-tag">01 — Selected Works</span>
-      <h2 class="section-title">Works</h2>
+      <span class="section-tag">Selected Works</span>
     </div>
 
-    <div class="works-list">
+    <div class="works-layout">
 
-      <a href="kuyua.html" class="work-row reveal reveal-d1" data-key="kuyua">
-        <span class="work-row-title">Kuyua</span>
-        <div class="work-row-meta">
-          <span class="work-row-cat">Brand Identity, Product Design</span>
-          <span class="work-row-year">2025</span>
+      <!-- Left: sticky image panel -->
+      <div class="works-img-col">
+        <div class="works-img-wrap">
+          <img id="works-img" src="hover-kuyua.webp" alt="">
         </div>
-      </a>
+        <div class="works-img-caption">
+          <span class="works-caption-name" id="works-caption-name">Kuyua</span>
+          <span class="works-caption-cat" id="works-caption-cat">Brand Identity, Product Design</span>
+        </div>
+      </div>
 
-      <a href="piantala.html" class="work-row reveal reveal-d2" data-key="piantala">
-        <span class="work-row-title">Piantala</span>
-        <div class="work-row-meta">
-          <span class="work-row-cat">Brand Identity, Web Design</span>
-          <span class="work-row-year">2025</span>
-        </div>
-      </a>
-
-      <a href="warner.html" class="work-row reveal reveal-d3" data-key="warner">
-        <span class="work-row-title">Warner Music × Gorgona Records</span>
-        <div class="work-row-meta">
-          <span class="work-row-cat">Brand Identity</span>
-          <span class="work-row-year">2023</span>
-        </div>
-      </a>
-
-      <a href="unmatchd.html" class="work-row reveal reveal-d4" data-key="unmatchd">
-        <span class="work-row-title">Unmatchd</span>
-        <div class="work-row-meta">
-          <span class="work-row-cat">Brand Identity, Web Design</span>
-          <span class="work-row-year">2023</span>
-        </div>
-      </a>
-
-      <a href="flightpal.html" class="work-row reveal reveal-d5" data-key="flightpal">
-        <span class="work-row-title">Flightpal</span>
-        <div class="work-row-meta">
-          <span class="work-row-cat">Product Design</span>
-          <span class="work-row-year">2023</span>
-        </div>
-      </a>
-
-      <a href="notagallery.html" class="work-row reveal reveal-d6" data-key="notagallery">
-        <span class="work-row-title">Notagallery</span>
-        <div class="work-row-meta">
-          <span class="work-row-cat">Brand Identity, Web Design</span>
-          <span class="work-row-year">2022</span>
-        </div>
-      </a>
+      <!-- Right: project list -->
+      <div class="works-nav-col">
+        <ul class="works-nav-list" id="works-nav-list">
+          <li>
+            <a href="kuyua.html" class="work-item is-default"
+               data-img="hover-kuyua.webp"
+               data-name="Kuyua"
+               data-cat="Brand Identity, Product Design">Kuyua</a>
+          </li>
+          <li>
+            <a href="piantala.html" class="work-item"
+               data-img="hover-piantala.webp"
+               data-name="Piantala"
+               data-cat="Brand Identity, Web Design">Piantala</a>
+          </li>
+          <li>
+            <a href="warner.html" class="work-item"
+               data-img="hover-warner.webp"
+               data-name="Warner Music × Gorgona Records"
+               data-cat="Brand Identity">Warner Music</a>
+          </li>
+          <li>
+            <a href="unmatchd.html" class="work-item"
+               data-img="hover-unmatchd.webp"
+               data-name="Unmatchd"
+               data-cat="Brand Identity, Web Design">Unmatchd</a>
+          </li>
+          <li>
+            <a href="flightpal.html" class="work-item"
+               data-img="hover-flightpal.webp"
+               data-name="Flightpal"
+               data-cat="Product Design">Flightpal</a>
+          </li>
+          <li>
+            <a href="notagallery.html" class="work-item"
+               data-img="hover-notagallery.webp"
+               data-name="Notagallery"
+               data-cat="Brand Identity, Web Design">Notagallery</a>
+          </li>
+        </ul>
+      </div>
 
     </div>
   </section>
@@ -1378,53 +1411,38 @@
       logoObserver.observe(heroLogo);
     })();
 
-    // ── WORKS HOVER PREVIEW ──
+    // ── WORKS IMAGE PANEL ──
     (function() {
-      // Create the preview element in JS so it's always available
-      const preview = document.createElement('div');
-      preview.className = 'work-preview';
-      document.body.appendChild(preview);
+      const img         = document.getElementById('works-img');
+      const captionName = document.getElementById('works-caption-name');
+      const captionCat  = document.getElementById('works-caption-cat');
+      const items       = document.querySelectorAll('.work-item');
+      if (!img) return;
 
-      // ─ Project hover preview images ─
-      const previews = {
-        kuyua:       "url('hover-kuyua.webp') center/cover no-repeat",
-        piantala:    "url('hover-piantala.webp') center/cover no-repeat",
-        warner:      "url('hover-warner.webp') center/cover no-repeat",
-        unmatchd:    "url('hover-unmatchd.webp') center/cover no-repeat",
-        flightpal:   "url('hover-flightpal.webp') center/cover no-repeat",
-        notagallery: "url('hover-notagallery.webp') center/cover no-repeat",
-      };
-
-      let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
-      let animating = false;
-
-      // Smooth follow with lerp
-      function lerp(a, b, t) { return a + (b - a) * t; }
-      function animate() {
-        currentX = lerp(currentX, targetX, 0.1);
-        currentY = lerp(currentY, targetY, 0.1);
-        preview.style.left = currentX + 'px';
-        preview.style.top  = currentY + 'px';
-        if (animating) requestAnimationFrame(animate);
+      function setPanel(src, name, cat) {
+        img.classList.add('hidden');
+        setTimeout(() => {
+          img.src = src;
+          img.onload = () => img.classList.remove('hidden');
+        }, 250);
+        captionName.textContent = name;
+        captionCat.textContent  = cat;
       }
 
-      document.addEventListener('mousemove', (e) => {
-        const pw = 190, ph = 130, offset = 20;
-        targetX = Math.min(e.clientX + offset, window.innerWidth  - pw - 16);
-        targetY = Math.max(e.clientY - ph / 2, 10);
-        targetY = Math.min(targetY, window.innerHeight - ph - 10);
-      });
-
-      document.querySelectorAll('.work-row[data-key]').forEach(row => {
-        row.addEventListener('mouseenter', () => {
-          preview.style.background = previews[row.dataset.key] || '#222';
-          preview.classList.add('visible');
-          animating = true;
-          animate();
+      items.forEach(item => {
+        item.addEventListener('mouseenter', () => {
+          items.forEach(i => i.classList.remove('is-default'));
+          setPanel(item.dataset.img, item.dataset.name, item.dataset.cat);
         });
-        row.addEventListener('mouseleave', () => {
-          preview.classList.remove('visible');
-          animating = false;
+        item.addEventListener('mouseleave', () => {
+          // restore first item as default after short delay if nothing else hovered
+          setTimeout(() => {
+            const hovered = document.querySelector('.work-item:hover');
+            if (!hovered) {
+              items[0].classList.add('is-default');
+              setPanel(items[0].dataset.img, items[0].dataset.name, items[0].dataset.cat);
+            }
+          }, 100);
         });
       });
     })();
