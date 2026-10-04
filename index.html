@@ -251,7 +251,7 @@
   /* no overlay on cards */
   .s-card::after { content: none; }
 
-  a.s-card { text-decoration: none; cursor: pointer; display: block; flex-shrink: 0; }
+  a.s-card { text-decoration: none; cursor: pointer; display: block; flex-shrink: 0; width: 420px; height: 420px; }
   .s-card:hover {
     transform: scale(1.03) translateY(-6px);
     z-index: 10;
@@ -742,7 +742,7 @@
     .giant-logo { width: 96vw; padding: 0 2vw; }
 
     /* Cards: nearly full-width squares — big and impactful */
-    .s-card { width: 90vw; height: 90vw; }
+    .s-card, a.s-card { width: 90vw; height: 90vw; }
 
     /* Slow the strip — bigger cards need more time to appreciate */
     .scroll-track { animation-duration: 40s; }
