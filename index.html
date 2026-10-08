@@ -362,102 +362,56 @@
   ══════════════════════════════════ */
   #works { background: var(--white); color: var(--black); }
 
-  /* ── WORKS TWO-COLUMN LAYOUT ── */
-  .works-layout {
+  /* ── WORKS GRID ── */
+  .works-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 5rem;
-    align-items: start;
-    padding-top: 3rem;
+    gap: 0;
+    margin: 0 calc(-1 * var(--section-pad, 4rem));
   }
-
-  /* Left: image panel */
-  .works-img-col {
-    position: sticky;
-    top: 6rem;
-  }
-  .works-img-wrap {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    border-radius: 4px;
-    overflow: hidden;
-    background: #111;
+  .work-card {
     position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    background: #111;
+    cursor: pointer;
+    display: block;
+    text-decoration: none;
   }
-  .works-img-wrap img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .work-card img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .work-card:hover img { transform: scale(1.04); }
+  .work-card-info {
     position: absolute;
-    inset: 0;
-    transition: opacity 0.5s ease;
-  }
-  .works-img-wrap img.hidden { opacity: 0; }
-  .works-img-caption {
-    margin-top: 1rem;
+    bottom: 0; left: 0; right: 0;
+    padding: 1.5rem 1.2rem 1rem;
+    background: linear-gradient(transparent, rgba(0,0,0,0.6));
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
-  }
-  .works-caption-name {
-    font-family: var(--body);
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--black);
-    opacity: 0.45;
-    transition: opacity 0.3s;
-  }
-  .works-caption-cat {
-    font-family: var(--body);
-    font-size: 0.8rem;
-    color: var(--black);
-    opacity: 0.25;
-    transition: opacity 0.3s;
-  }
-
-  /* Right: project list */
-  .works-nav-list {
-    list-style: none;
-    padding: 0 0 0 3rem;
-    margin: 0;
-  }
-  .works-nav-list li { overflow: hidden; }
-  .work-item {
-    display: block;
-    font-family: var(--display);
-    font-size: clamp(1.1rem, 2.4vw, 2rem);
-    font-weight: 500;
-    text-transform: none;
-    letter-spacing: -0.01em;
-    line-height: 1.05;
-    text-decoration: none;
-    color: var(--black);
-    opacity: 0.18;
-    padding: 0.12em 0 0.12em 0.8em;
-    position: relative;
-    transition: opacity 0.3s ease;
-  }
-  .work-item::before {
-    content: '•';
-    font-weight: 700;
-    position: absolute;
-    left: 0;
+    align-items: flex-end;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.35s ease;
   }
-  .works-nav-list:hover .work-item { opacity: 0.1; }
-  .works-nav-list:hover .work-item:hover,
-  .work-item.is-default {
-    opacity: 1;
+  .work-card:hover .work-card-info { opacity: 1; }
+  .work-card-name {
+    font-family: var(--display);
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+    font-weight: 500;
+    color: #fff;
   }
-  .works-nav-list:hover .work-item:hover::before { opacity: 1; }
-  .work-item.is-default::before { opacity: 1; }
+  .work-card-cat {
+    font-family: var(--body);
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.65);
+    text-align: right;
+    line-height: 1.4;
+  }
 
-  @media (max-width: 768px) {
-    .works-layout { grid-template-columns: 1fr; }
-    .works-img-col { position: static; }
-    .work-item { font-size: clamp(1.8rem, 8vw, 3rem); }
+  @media (max-width: 600px) {
+    .works-grid { grid-template-columns: 1fr; margin: 0 -2rem; }
   }
 
   /* ══════════════════════════════════
@@ -1046,66 +1000,56 @@
        WORKS
   ══════════════════════════════════ -->
   <section id="works" class="section">
-    <div class="section-header reveal">
+
+    <div class="works-grid">
+      <a href="kuyua.html" class="work-card">
+        <img src="project1.webp" alt="Kuyua">
+        <div class="work-card-info">
+          <span class="work-card-name">Kuyua</span>
+          <span class="work-card-cat">Brand Identity<br>Product Design</span>
+        </div>
+      </a>
+      <a href="unmatchd.html" class="work-card">
+        <img src="project9.webp" alt="Unmatchd">
+        <div class="work-card-info">
+          <span class="work-card-name">Unmatchd</span>
+          <span class="work-card-cat">Brand Identity<br>Web Design</span>
+        </div>
+      </a>
+      <a href="warner.html" class="work-card">
+        <img src="project5.webp" alt="Warner Music">
+        <div class="work-card-info">
+          <span class="work-card-name">Warner Music</span>
+          <span class="work-card-cat">Brand Identity</span>
+        </div>
+      </a>
+      <a href="piantala.html" class="work-card">
+        <img src="project3.webp" alt="Piantala">
+        <div class="work-card-info">
+          <span class="work-card-name">Piantala</span>
+          <span class="work-card-cat">Brand Identity<br>Web Design</span>
+        </div>
+      </a>
+      <a href="flightpal.html" class="work-card">
+        <img src="project4.webp" alt="Flightpal">
+        <div class="work-card-info">
+          <span class="work-card-name">Flightpal</span>
+          <span class="work-card-cat">Product Design</span>
+        </div>
+      </a>
+      <a href="notagallery.html" class="work-card">
+        <img src="project7.webp" alt="Notagallery">
+        <div class="work-card-info">
+          <span class="work-card-name">Notagallery</span>
+          <span class="work-card-cat">Brand Identity<br>Web Design</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="section-header" style="margin-top: 2rem;">
       <span class="section-tag">Selected Works</span>
     </div>
 
-    <div class="works-layout">
-
-      <!-- Left: sticky image panel -->
-      <div class="works-img-col">
-        <div class="works-img-wrap">
-          <img id="works-img" src="project1.webp" alt="">
-        </div>
-        <div class="works-img-caption">
-          <span class="works-caption-name" id="works-caption-name">Kuyua</span>
-          <span class="works-caption-cat" id="works-caption-cat">Brand Identity, Product Design</span>
-        </div>
-      </div>
-
-      <!-- Right: project list -->
-      <div class="works-nav-col">
-        <ul class="works-nav-list" id="works-nav-list">
-          <li>
-            <a href="kuyua.html" class="work-item is-default"
-               data-img="project1.webp"
-               data-name="Kuyua"
-               data-cat="Brand Identity, Product Design">Kuyua</a>
-          </li>
-          <li>
-            <a href="piantala.html" class="work-item"
-               data-img="project3.webp"
-               data-name="Piantala"
-               data-cat="Brand Identity, Web Design">Piantala</a>
-          </li>
-          <li>
-            <a href="warner.html" class="work-item"
-               data-img="project5.webp"
-               data-name="Warner Music × Gorgona Records"
-               data-cat="Brand Identity">Warner Music</a>
-          </li>
-          <li>
-            <a href="unmatchd.html" class="work-item"
-               data-img="project9.webp"
-               data-name="Unmatchd"
-               data-cat="Brand Identity, Web Design">Unmatchd</a>
-          </li>
-          <li>
-            <a href="flightpal.html" class="work-item"
-               data-img="project4.webp"
-               data-name="Flightpal"
-               data-cat="Product Design">Flightpal</a>
-          </li>
-          <li>
-            <a href="notagallery.html" class="work-item"
-               data-img="project7.webp"
-               data-name="Notagallery"
-               data-cat="Brand Identity, Web Design">Notagallery</a>
-          </li>
-        </ul>
-      </div>
-
-    </div>
   </section>
 
   <!-- ══════════════════════════════════
@@ -1411,42 +1355,6 @@
       logoObserver.observe(heroLogo);
     })();
 
-    // ── WORKS IMAGE PANEL ──
-    (function() {
-      const img         = document.getElementById('works-img');
-      const captionName = document.getElementById('works-caption-name');
-      const captionCat  = document.getElementById('works-caption-cat');
-      const items       = document.querySelectorAll('.work-item');
-      if (!img) return;
-
-      function setPanel(src, name, cat) {
-        img.classList.add('hidden');
-        setTimeout(() => {
-          img.src = src;
-          img.onload = () => img.classList.remove('hidden');
-        }, 250);
-        captionName.textContent = name;
-        captionCat.textContent  = cat;
-      }
-
-      items.forEach(item => {
-        item.addEventListener('mouseenter', () => {
-          items.forEach(i => i.classList.remove('is-default'));
-          setPanel(item.dataset.img, item.dataset.name, item.dataset.cat);
-        });
-        item.addEventListener('mouseleave', () => {
-          // restore first item as default after short delay if nothing else hovered
-          setTimeout(() => {
-            const hovered = document.querySelector('.work-item:hover');
-            if (!hovered) {
-              items[0].classList.add('is-default');
-              setPanel(items[0].dataset.img, items[0].dataset.name, items[0].dataset.cat);
-
-            }
-          }, 100);
-        });
-      });
-    })();
   </script>
 
 
